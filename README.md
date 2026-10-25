@@ -10,6 +10,7 @@ The application provides a digital wardrobe where users can categorize clothing 
 
 ## Key Features
 
+
 - **Digital Closet:** Organize clothing items into categories.
 - **Clothing Scanning:** Capture or add clothing photos and provide item details.
 - **Item Tagging and Search:** Name, categorize, tag, and search clothing items.
@@ -17,6 +18,10 @@ The application provides a digital wardrobe where users can categorize clothing 
 - **Saved Outfits and Drafts:** Save completed outfits and keep unfinished combinations as drafts.
 - **Wardrobe Statistics:** View clothing category distribution and color statistics.
 - **Wear Tracker:** Track clothing usage and identify underused items.
+- **User Profile:** View account information and the number of clothing items saved in the closet.
+- **Body Shape Preferences:** View and update the selected body shape.
+- **Settings and Preferences:** Access personal settings and preferences.
+- **Account Management:** Sign in, access password recovery, and log out with confirmation feedback.
 
 ---
 
