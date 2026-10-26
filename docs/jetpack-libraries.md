@@ -18,4 +18,4 @@ This document lists the Android and Jetpack libraries planned for the Mystiq dig
 | AndroidX Palette | Extracting dominant colors from clothing images. | It supports the closet statistics feature by identifying prominent colors in clothing photos. |
 | Hilt | Providing dependencies to ViewModels and other application components. | It reduces manual dependency creation and helps organize database and repository dependencies. |
 | Coil | Loading and displaying clothing images in the Compose UI. | It simplifies loading images from URIs or file paths and displaying them efficiently in the application. |
-| Lifecycle Runtime Compose | Collecting Flow-based UI state in Compose using `collectAsStateWithLifecycle()`. | It allows the UI to observe state in a lifecycle-aware way and avoids unnecessary collection when the screen is inactive. |
+| Lifecycle Runtime Compose | Collecting Flow-based ui state in Compose using `collectAsStateWithLifecycle()`. | It allows the UI to observe state in a lifecycle-aware way and avoids unnecessary collection when the screen is inactive. |
