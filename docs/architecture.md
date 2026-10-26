@@ -63,7 +63,7 @@ These interfaces specify what the application needs, such as saving a clothing i
 
 ## 3. The Data Layer
 
-The Data layer handles data storage, retrieval, and communication with the underlying data sources. It provides implementations of the repository interfaces declared in the Domain layer.
+The Data layer handles data storage, retrieval, and communication with the underlying data sources. It provides implementations of the repository interfaces declared in the Domain Layer.
 
 ### Main Components and Libraries
 
