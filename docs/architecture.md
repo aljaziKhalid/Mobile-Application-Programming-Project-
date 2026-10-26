@@ -1,98 +1,135 @@
 # Mystiq Application Architecture
 
-Mystiq is built in three layers: **UI, Domain, and Data**. Hilt connects them, and each layer only talks to the next layer. The UI never accesses the database directly, and the Domain layer does not depend on Android.
+Mystiq follows a three-layer architecture consisting of the **UI, Domain, and Data layers**. Hilt is used for dependency injection to connect the application components. Each layer has a clearly defined responsibility, and dependencies follow the architecture's boundaries. The UI layer does not access the database directly, and the Domain layer is independent of Android-specific frameworks.
 
 ## 1. The UI Layer
 
-This layer contains everything the user sees and interacts with. It is built with Jetpack Compose and Material 3 and contains ten screens: Home, Closet, Camera, Tagging, Spread, Vault, Archive, Sign-in, Profile, and Admin.
+The UI layer contains everything users see and interact with. It is built with Jetpack Compose and Material 3 and includes ten screens: Home, Closet, Camera, Tagging, Spread, Vault, Archive, Sign-in, Profile, and Admin.
 
-- **MystiqNavHost (Navigation Compose):** Decides which screen is displayed and passes data between screens, such as the photo URI from Camera to Tagging.
-- **MainActivity:** Hosts the Compose UI.
-- **CameraX:** Provides the live camera preview on the Camera screen.
-- **Dialogs and Snackbars:** Display error, warning, and success messages according to the style guide.
+### Main Components and Libraries
 
-Each screen has its own ViewModel, such as `ClosetViewModel` or `TaggingViewModel`. Screens contain no business logic. When users tap or type, the screen passes the action to its ViewModel. When the ViewModel publishes a new state, the screen redraws.
+- **Jetpack Compose:** Builds the application's screens and reusable UI components.
+- **Material 3:** Provides consistent interface components, including cards, buttons, dialogs, snackbars, search fields, and filter chips.
+- **Navigation Compose:** Uses `MystiqNavHost` to manage navigation between screens and pass data between destinations, such as a photo URI from Camera to Tagging.
+- **AndroidX Activity:** Provides the `MainActivity` host for the Compose UI and supports activity-related functionality, including activity results.
+- **CameraX:** Provides camera functionality and a live preview on the Camera screen.
+- **Coil:** Loads and displays clothing images in Compose UI components, such as clothing cards and outfit previews.
+- **Lifecycle ViewModel:** Separates screen-related state and UI logic from the interface.
+- **Lifecycle Runtime Compose:** Supports lifecycle-aware collection of UI state, such as collecting a Flow using `collectAsStateWithLifecycle()`.
+- **Kotlin Coroutines and Flow:** Support asynchronous operations and reactive data updates.
+- **AndroidX Core:** Provides Android compatibility utilities where required by the application.
+- **Dialogs and Snackbars:** Display warning, error, and success messages according to the style guide.
 
-The ViewModel holds the screen state in a `UiState` object, which represents loading, success, or error. It also survives screen rotation, helping users retain their current state.
+Each screen has its own ViewModel, such as `ClosetViewModel` or `TaggingViewModel`. Screens are responsible for displaying information and forwarding user actions to their ViewModels rather than implementing business logic directly.
+
+ViewModels expose screen state through a `UiState` object representing loading, success, or error states. Compose observes these state updates and redraws the interface when the state changes. ViewModels also help preserve screen-related state during configuration changes, such as screen rotation.
 
 ## 2. The Domain Layer
 
-This layer contains the application's business rules, written in plain Kotlin.
+The Domain layer contains the application's business rules and is written in plain Kotlin. It does not depend on Android-specific APIs or database implementation details.
 
-### Domain Models
+### 2.1 Domain Models
 
-The models represent the main objects in the application:
+The main domain models represent the application's real-world objects:
 
 - `ClothingItem`
-- `Outfit`, which can be `SAVED` or `DRAFT`
+- `Outfit`, which can have a `SAVED` or `DRAFT` status
 - `Category`
 - `WearLog`
 - `User`
 
-### Use Cases
+### 2.2 Use Cases
 
-Each use case is a small class responsible for one task, such as adding an item, saving an outfit as a draft, searching the closet, or logging that an item was worn.
+Each use case is responsible for a specific application operation. Examples include:
 
-ViewModels call these use cases instead of implementing business operations directly.
+- `AddClothingItemUseCase`
+- Saving an outfit as a draft
+- Searching the closet
+- Logging that a clothing item was worn
+- Retrieving saved outfits and drafts
 
-### Repository Interfaces
+ViewModels call the relevant use cases to perform business operations instead of implementing those operations directly.
 
-The Domain layer declares the repository interfaces:
+### 2.3 Repository Interfaces
+
+The Domain layer declares repository interfaces that define the operations required by the application:
 
 - `ClosetRepository`
 - `OutfitRepository`
 - `WearRepository`
 - `AuthRepository`
 
-An interface defines what the application needs, such as saving an item or retrieving all drafts, without specifying how the operation is performed. This means the use cases do not depend on a specific database, allowing the storage implementation to change without modifying the rest of the application.
+These interfaces specify what the application needs, such as saving a clothing item or retrieving drafts, without defining how the operation is implemented. This keeps business rules independent of specific storage technologies.
 
 ## 3. The Data Layer
 
-This layer handles the actual storage and retrieval of data.
+The Data layer handles data storage, retrieval, and communication with the underlying data sources. It provides implementations of the repository interfaces declared in the Domain layer.
 
-- **Repository Implementations:** Implement the interfaces declared in the Domain layer.
-- **Room Database:** Stores clothing items, categories, outfits, drafts, tags, and wear history through its DAOs.
-- **DataStore:** Stores lightweight settings, such as information about the signed-in user.
-- **ImageStorage:** Saves clothing photos on the device.
-- **Palette:** Analyzes clothing photos to identify dominant colors, supporting the clothing color statistics feature on the Spread screen.
-- **WorkManager:** Runs background workers for wear-tracking reminders, even when the application is closed.
-- **Mappers:** Convert database entities into Domain models so that upper layers do not depend on database-specific details.
+### Main Components and Libraries
 
-## 4. How the Components Interact
+- **Repository Implementations:** Implement `ClosetRepository`, `OutfitRepository`, `WearRepository`, and `AuthRepository`.
+- **Room Database:** Stores structured local data, including clothing items, categories, outfits, drafts, tags, and wear history, through database entities and DAOs.
+- **DataStore:** Stores lightweight application preferences, such as relevant sign-in or settings information.
+- **ImageStorage:** Manages the storage and retrieval of clothing photos on the device.
+- **AndroidX Palette:** Analyzes clothing images to identify dominant colors, supporting the clothing color statistics feature on the Spread screen.
+- **WorkManager:** Schedules background tasks, such as wear-tracking reminders, when this functionality is implemented.
+- **Mappers:** Convert database entities into domain models so that upper layers do not depend on database-specific details.
+- **Kotlin Coroutines and Flow:** Support asynchronous data operations and the observation of data changes.
 
-Information moves through the architecture in a controlled way: user actions flow downward, while data and results flow back upward.
+Room can expose database queries as Flow streams. When stored data changes, the relevant Flow can emit updated values, allowing the UI to display current information through its ViewModel.
+
+## 4. Dependency Injection with Hilt
+
+Hilt provides dependency injection for the application's components. It helps provide dependencies such as repository implementations and use cases to the ViewModels and other components that require them.
+
+This reduces manual dependency creation and helps keep component construction organized.
+
+The intended dependency flow is:
+
+**UI → Domain ← Data implementations**
+
+The UI depends on Domain operations, while the Data layer implements the repository interfaces defined by Domain. Hilt provides the configured implementations to the components that need them.
+
+## 5. How the Components Interact
+
+User actions move from the UI through the Domain layer to the Data layer. Results return to the UI through the relevant state and data-observation mechanisms.
 
 ### Example: Adding a Clothing Item
 
-1. The user takes a photo on the Camera screen, and CameraX captures it.
-2. Navigation passes the user to the Tagging screen and sends the photo URI.
+1. The user captures a clothing photo using the Camera screen and CameraX.
+2. Navigation passes the photo URI to the Tagging screen.
 3. The user enters the item's name, category, color, and brand.
-4. When the user taps **Add Item**, the screen sends the action to `TaggingViewModel`.
-5. The ViewModel checks whether a similar item name already exists. If a duplicate is detected, a warning dialog is displayed.
-6. If no duplicate is found, the ViewModel calls `AddClothingItemUseCase`.
-7. The use case creates a `ClothingItem` and passes it to `ClosetRepository`.
-8. The repository implementation stores the photo, extracts its dominant color, and inserts the item into Room.
-9. Room exposes the updated data through a Flow, allowing the Closet screen's data to update automatically.
-10. The ViewModel publishes a new `UiState`, the screen redraws, and a success snackbar confirms that the item was saved.
+4. When the user taps **Add Item**, the screen forwards the action to `TaggingViewModel`.
+5. The ViewModel checks whether a similar item name already exists. If a duplicate is detected, the UI displays a warning dialog.
+6. If the item passes validation, the ViewModel calls `AddClothingItemUseCase`.
+7. The use case applies the relevant business rules and calls the appropriate `ClosetRepository` operation.
+8. The repository implementation manages the photo through `ImageStorage`, uses Palette to extract its dominant color when required, and stores the item's structured data in Room.
+9. Room emits updated data through Flow when the database changes.
+10. The ViewModel exposes the updated information through `UiState`. Compose redraws the Closet screen, and a success snackbar confirms that the item was saved.
 
-This process does not require the user to refresh the screen manually.
+Coil can then load and display the stored clothing image in the appropriate UI component.
 
 ### Other Features
 
-The same interaction pattern applies to other features, including saving outfits in the preview space, moving drafts to the Vault, and viewing statistics on the Spread screen.
+The same general architecture supports other features, including saving outfits, managing drafts in the Vault, searching the closet, recording clothing usage, and displaying clothing statistics on the Spread screen.
 
-Each feature follows the same general flow:
+The general operation flow is:
 
-**Screen → ViewModel → Use Case → Repository → Data Source**
+**Screen → ViewModel → Use Case → Repository Interface → Repository Implementation → Data Source**
 
-The result then returns through the data observation and UI state mechanisms, allowing the screen to display the updated information.
+The result is observed or returned through the appropriate data and state mechanisms, allowing the UI to display updated information.
 
-## 5. Benefits of This Architecture
+## 6. Benefits of This Architecture
 
-This structure keeps responsibilities separate and allows team members to work on different layers with fewer dependencies between them.
+The layered architecture provides several benefits:
 
-It also improves testability because individual use cases can be tested independently of the UI and database.
+- **Separation of concerns:** Each layer has a clearly defined responsibility.
+- **Maintainability:** Changes to storage implementation can be isolated from business rules and UI components.
+- **Testability:** Domain use cases can be tested independently of Android UI components and database implementations.
+- **Reusability:** Shared components and use cases can support multiple screens.
+- **Responsive UI:** Coroutines and Flow support asynchronous operations and reactive data updates.
+- **Extensibility:** New features can be added while preserving the separation between presentation, business logic, and data management.
 
-By separating presentation, business rules, and data management, Mystiq becomes easier to maintain, test, and extend.
+## 7. Architecture Diagram
 
-
+The architecture diagram is provided separately in `architecture.png`.
