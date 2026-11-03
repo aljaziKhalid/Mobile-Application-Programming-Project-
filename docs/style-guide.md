@@ -132,4 +132,4 @@ The Edit Information and Settings actions should follow the same button and typo
 
 This document should be updated whenever the team approves changes to the color palette, typography, spacing, shared components, or UI states.
 
-All wireframes and implemented screens should follow the same approved design standards..
+All wireframes and implemented screens should follow the same approved design standards.
