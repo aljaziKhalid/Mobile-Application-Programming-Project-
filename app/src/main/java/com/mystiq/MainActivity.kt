@@ -1,4 +1,3 @@
-
 package com.mystiq
 
 import android.os.Bundle
@@ -6,8 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.*
+
 import com.mystiq.ui.screens.auth.SignInScreen
 import com.mystiq.ui.screens.auth.SignUpRoute
+import com.mystiq.ui.screens.home.HomeRoute
+import com.mystiq.ui.screens.archive.ArchiveRoute
 import com.mystiq.ui.theme.Mystiq_FinalTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,6 +22,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             Mystiq_FinalTheme {
 
+                // Start with Home for testing
                 var currentScreen by remember {
                     mutableStateOf("signin")
                 }
@@ -38,19 +41,24 @@ class MainActivity : ComponentActivity() {
                         SignInScreen(
                             username = username,
                             password = password,
-                            onUsernameChange = { username = it },
-                            onPasswordChange = { password = it },
+                            onUsernameChange = {
+                                username = it
+                            },
+                            onPasswordChange = {
+                                password = it
+                            },
                             onForgotPasswordClick = {
                                 // TODO: Forgot Password
                             },
                             onSignInClick = {
-                                // TODO: Connect Sign In
+                                currentScreen = "home"
                             },
                             onSignUpClick = {
                                 currentScreen = "signup"
                             },
-                            isSignInEnabled = username.isNotBlank() &&
-                                    password.isNotBlank()
+                            isSignInEnabled =
+                                username.isNotBlank() &&
+                                        password.isNotBlank()
                         )
                     }
 
@@ -61,6 +69,34 @@ class MainActivity : ComponentActivity() {
                             },
                             onSignUpSuccess = {
                                 currentScreen = "signin"
+                            }
+                        )
+                    }
+
+                    "home" -> {
+                        HomeRoute(
+                            onClosetClick = {
+                                // TODO: Navigate to Closet
+                            },
+                            onVaultClick = {
+                                // TODO: Navigate to Vault
+                            },
+                            onArchiveClick = {
+                                currentScreen = "archive"
+                            },
+                            onCameraClick = {
+                                // TODO: Navigate to Camera
+                            },
+                            onProfileClick = {
+                                // TODO: Navigate to Profile
+                            }
+                        )
+                    }
+
+                    "archive" -> {
+                        ArchiveRoute(
+                            onBackClick = {
+                                currentScreen = "home"
                             }
                         )
                     }
