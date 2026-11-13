@@ -10,6 +10,7 @@ import com.mystiq.ui.screens.auth.SignInScreen
 import com.mystiq.ui.screens.auth.SignUpRoute
 import com.mystiq.ui.screens.home.HomeRoute
 import com.mystiq.ui.screens.archive.ArchiveRoute
+import com.mystiq.ui.screens.camera.CameraRoute
 import com.mystiq.ui.theme.Mystiq_FinalTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,7 +23,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             Mystiq_FinalTheme {
 
-                // Start with Home for testing
                 var currentScreen by remember {
                     mutableStateOf("signin")
                 }
@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
                                 password = it
                             },
                             onForgotPasswordClick = {
-                                // TODO: Forgot Password
+                                // TODO
                             },
                             onSignInClick = {
                                 currentScreen = "home"
@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
                             },
                             isSignInEnabled =
                                 username.isNotBlank() &&
-                                        password.isNotBlank()
+                                password.isNotBlank()
                         )
                     }
 
@@ -76,19 +76,19 @@ class MainActivity : ComponentActivity() {
                     "home" -> {
                         HomeRoute(
                             onClosetClick = {
-                                // TODO: Navigate to Closet
+                                // TODO
                             },
                             onVaultClick = {
-                                // TODO: Navigate to Vault
+                                // TODO
                             },
                             onArchiveClick = {
                                 currentScreen = "archive"
                             },
                             onCameraClick = {
-                                // TODO: Navigate to Camera
+                                currentScreen = "camera"
                             },
                             onProfileClick = {
-                                // TODO: Navigate to Profile
+                                // TODO
                             }
                         )
                     }
@@ -98,6 +98,16 @@ class MainActivity : ComponentActivity() {
                             onBackClick = {
                                 currentScreen = "home"
                             }
+                        )
+                    }
+
+                    "camera" -> {
+                        CameraRoute(
+                            onBackClick = {
+                                currentScreen = "home"
+                            },
+                            onImageReady = { },
+                            onCaptureClick = { }
                         )
                     }
                 }
