@@ -10,7 +10,6 @@ The application provides a digital wardrobe where users can categorize clothing 
 
 ## Key Features
 
-
 - **Digital Closet:** Organize clothing items into categories.
 - **Clothing Scanning:** Capture or add clothing photos and provide item details.
 - **Item Tagging and Search:** Name, categorize, tag, and search clothing items.
@@ -35,7 +34,7 @@ Explore the Mystiq user interface prototype:
 
 ## Project Documentation
 
-The following documents provide further details about the application's design and architecture.
+The following documents provide further details about the application's design, architecture, and database.
 
 | Document | Description |
 |---|---|
@@ -45,15 +44,26 @@ The following documents provide further details about the application's design a
 | [Architecture Documentation](docs/architecture.md) | Description of the system layers and data flow |
 | [Style Guide](docs/style-guide.md) | Colors, typography, spacing, and UI components |
 | [AI Use Log](docs/ai-use-log.md) | Record of AI-assisted work during the project |
+| [Database Design PDF](docs/database/Team02_M3A_Database.pdf) | Database schema, entities, relationships, and Room implementation plan |
 
 ---
 
+## Database ER Diagram
 
-*This project is developed as part of the CSC 402 Mobile Application Programming course.*
+The following diagram illustrates the Mystiq database structure, including its entities, primary keys, foreign keys, and relationships.
 
+![Mystiq ER Diagram](docs/Mystiq_ER_Diagram.png)
+
+---
 
 ## Team
-Group 2
+
+**Group 2**
 
 ## Course
-Mobile Application Programming, Imam Abdurahman University, First Semester 2026
+
+Mobile Application Programming, Imam Abdulrahman Bin Faisal University, First Semester 2026
+
+---
+
+*This project is developed as part of the CSC 402 Mobile Application Programming course.*
