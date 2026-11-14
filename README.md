@@ -48,13 +48,7 @@ The following documents provide further details about the application's design, 
 
 ---
 
-## Database ER Diagram
 
-The following diagram illustrates the Mystiq database structure, including its entities, primary keys, foreign keys, and relationships.
-
-![Mystiq ER Diagram](docs/Mystiq_ER_Diagram.png)
-
----
 
 ## Team
 
