@@ -20,6 +20,6 @@ import androidx.room.PrimaryKey
 data class TagEntity(
     @PrimaryKey(autoGenerate = true)
     val tagId: Int = 0,
-    val userId: Int,
+    val userId: Long,
     val name: String
 )
