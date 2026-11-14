@@ -1,3 +1,4 @@
+
 package com.mystiq.data.local.entity
 
 import androidx.room.Entity
@@ -24,6 +25,6 @@ import androidx.room.Index
     indices = [Index("clothingItemId")]
 )
 data class OutfitItemEntity(
-    val outfitId: Long,
-    val clothingItemId: Long
+    val outfitId: Int,
+    val clothingItemId: Int
 )
