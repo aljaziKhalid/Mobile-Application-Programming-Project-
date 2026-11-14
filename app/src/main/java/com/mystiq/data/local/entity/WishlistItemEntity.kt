@@ -8,6 +8,10 @@ import androidx.room.PrimaryKey
 /**
  * Table: wishlist_items
  * One row = one item the user wants to buy (shown on the Wishlist screen).
+ *
+ * PK:  wishlistId (Int)
+ * FKs: userId -> UserEntity.userId (Long)
+ *      itemId -> ClothingItemEntity.id (Int)
  */
 @Entity(
     tableName = "wishlist_items",
@@ -18,17 +22,25 @@ import androidx.room.PrimaryKey
             parentColumns = ["userId"],
             childColumns = ["userId"],
             onDelete = ForeignKey.CASCADE
+        ),
+        // Optional link to a clothing item in the closet (e.g. "similar to this item",
+        // or the item after it was bought). Deleting that item keeps the wish.
+        ForeignKey(
+            entity = ClothingItemEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["itemId"],
+            onDelete = ForeignKey.SET_NULL
         )
-        // TODO: add the CategoryEntity foreign key here when CategoryEntity is ready
     ],
-    indices = [Index("userId"), Index("categoryId")]
+    indices = [Index("userId"), Index("itemId")]
 )
 data class WishlistItemEntity(
     @PrimaryKey(autoGenerate = true)
-    val wishlistItemId: Long = 0,
+    val wishlistId: Int = 0,
     val userId: Long,
-    val categoryId: Long? = null,
+    val itemId: Int? = null,             // nullable: most wishes are not in the closet yet
     val name: String,
+    val category: String? = null,        // shown under the name, e.g. "Shoes"
     val imageUri: String? = null,        // path of the image saved in app storage
     val createdAt: Long = System.currentTimeMillis()
 )

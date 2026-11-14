@@ -17,10 +17,10 @@ interface WishlistDao {
     fun getWishlistItems(userId: Long): Flow<List<WishlistItemEntity>>
 
     // Read: one item by its id
-    @Query("SELECT * FROM wishlist_items WHERE wishlistItemId = :wishlistItemId")
-    suspend fun getById(wishlistItemId: Long): WishlistItemEntity?
+    @Query("SELECT * FROM wishlist_items WHERE wishlistId = :wishlistId")
+    suspend fun getById(wishlistId: Int): WishlistItemEntity?
 
-    // Insert: returns the new item's id
+    // Insert: returns the new row id
     @Insert
     suspend fun insert(item: WishlistItemEntity): Long
 
@@ -33,6 +33,6 @@ interface WishlistDao {
     suspend fun delete(item: WishlistItemEntity)
 
     // Delete by id (used when the heart is tapped on the Wishlist screen)
-    @Query("DELETE FROM wishlist_items WHERE wishlistItemId = :wishlistItemId")
-    suspend fun deleteById(wishlistItemId: Long)
+    @Query("DELETE FROM wishlist_items WHERE wishlistId = :wishlistId")
+    suspend fun deleteById(wishlistId: Int)
 }
