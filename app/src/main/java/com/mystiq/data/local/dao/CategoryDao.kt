@@ -1,5 +1,5 @@
-package com.mystiq.data.local.dao
 
+package com.mystiq.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
