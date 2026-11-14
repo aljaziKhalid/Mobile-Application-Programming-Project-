@@ -26,3 +26,5 @@ interface ClothingItemDao {
     @Query("SELECT * FROM clothing_items WHERE isArchived = 0 ORDER BY id DESC")
     suspend fun getActiveItems(): List<ClothingItemEntity>
 }
+
+..
