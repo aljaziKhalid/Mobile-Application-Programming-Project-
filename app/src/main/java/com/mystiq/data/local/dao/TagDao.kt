@@ -1,3 +1,4 @@
+
 package com.mystiq.data.local.dao
 
 import androidx.room.Dao
@@ -21,7 +22,7 @@ interface TagDao {
     suspend fun deleteTag(tag: TagEntity)
 
     @Query("SELECT * FROM tags WHERE userId = :userId ORDER BY name")
-    suspend fun getTagsByUser(userId: Int): List<TagEntity>
+    suspend fun getTagsByUser(userId: Long): List<TagEntity>
 
     @Query("SELECT * FROM tags WHERE tagId = :tagId")
     suspend fun getTagById(tagId: Int): TagEntity?
