@@ -12,6 +12,7 @@ import com.mystiq.ui.screens.home.HomeRoute
 import com.mystiq.ui.screens.archive.ArchiveRoute
 import com.mystiq.ui.screens.camera.CameraRoute
 import com.mystiq.ui.theme.Mystiq_FinalTheme
+import com.mystiq.ui.screens.profile.ProfileRoute
 
 class MainActivity : ComponentActivity() {
 
@@ -88,7 +89,7 @@ class MainActivity : ComponentActivity() {
                                 currentScreen = "camera"
                             },
                             onProfileClick = {
-                                // TODO
+                                currentScreen = "profile"
                             }
                         )
                     }
@@ -108,6 +109,18 @@ class MainActivity : ComponentActivity() {
                             },
                             onImageReady = { },
                             onCaptureClick = { }
+                        )
+                    }
+                    "profile" -> {
+                        ProfileRoute(
+                            onLogoutClick = {
+                                username = ""
+                                password = ""
+                                currentScreen = "signin"
+                            },
+                            onClosetClick = {
+                                // We'll connect Closet later
+                            }
                         )
                     }
                 }

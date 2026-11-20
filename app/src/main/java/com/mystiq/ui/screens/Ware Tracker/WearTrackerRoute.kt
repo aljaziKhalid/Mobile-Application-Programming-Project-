@@ -1,4 +1,4 @@
-package Mobile-Application-Programming-Project-
+package com.mystiq.ui.screens.WareTracker
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

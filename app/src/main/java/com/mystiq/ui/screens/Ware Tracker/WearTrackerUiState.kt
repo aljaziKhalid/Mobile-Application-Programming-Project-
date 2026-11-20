@@ -1,3 +1,4 @@
+package com.mystiq.ui.screens.WareTracker
 data class WearItem(
     val name: String,
     val wearTimes: Int,

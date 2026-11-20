@@ -1,5 +1,4 @@
-package Mobile-Application-Programming-Project-
-
+package com.mystiq.ui.screens.Spread
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
