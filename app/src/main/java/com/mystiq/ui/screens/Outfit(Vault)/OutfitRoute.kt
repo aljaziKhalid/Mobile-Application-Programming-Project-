@@ -20,4 +20,3 @@ fun OutfitRoute(
         onCloseClick = viewModel::onCloseClick
     )
 }
-.

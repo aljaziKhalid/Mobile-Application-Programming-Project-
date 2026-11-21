@@ -39,4 +39,3 @@ class OutfitViewModel : ViewModel() {
         _uiState.update { it.copy(selectedIds = emptySet()) }
     }
 }
-.
