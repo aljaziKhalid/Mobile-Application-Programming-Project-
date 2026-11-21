@@ -1,5 +1,6 @@
 package com.mystiq.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,31 +26,26 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mystiq.ui.theme.MystiqBackground
+import com.mystiq.ui.theme.Mystiq_FinalTheme
 
 /*
  * Reusable UI states for every Mystiq screen.
- * Any screen (Closet, Outfits, Wishlist, Wear Tracker...) can show these
- * instead of writing its own loading / empty / error layout.
+ * They draw on top of the screen's background, so text and icons use onBackground.
  *
  * Example inside a screen:
  *   when {
  *       uiState.isLoading -> LoadingState()
- *       uiState.errorMessage != null -> ErrorState(uiState.errorMessage, onRetry = viewModel::load)
+ *       uiState.errorMessage != null -> ErrorState(uiState.errorMessage, onRetryClick = viewModel::load)
  *       uiState.items.isEmpty() -> ClosetEmptyState(onScanClick = onAddItemClick)
  *       else -> /* the screen's normal content */
  *   }
  */
-
-// TODO: move these into ui/theme/Color.kt
-private val LightBlue = Color(0xFFCFE0F3)
-private val BlueText = Color(0xFF5B7A99)
-private val MutedText = Color(0xFF6B6B6B)
 
 /** Loading: a spinner in the middle of the available space. */
 @Composable
@@ -57,15 +53,16 @@ fun LoadingState(
     modifier: Modifier = Modifier,
     message: String? = null
 ) {
+    val colors = MaterialTheme.colorScheme
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CircularProgressIndicator()
+        CircularProgressIndicator(color = colors.onBackground)
         if (message != null) {
             Spacer(Modifier.height(12.dp))
-            Text(message, color = MutedText)
+            Text(message, color = colors.onBackground, style = MaterialTheme.typography.bodyMedium)
         }
     }
 }
@@ -84,6 +81,7 @@ fun EmptyState(
     actionIcon: ImageVector? = null,
     onActionClick: () -> Unit = {}
 ) {
+    val colors = MaterialTheme.colorScheme
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -94,20 +92,21 @@ fun EmptyState(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = MutedText,
+            tint = colors.onBackground,
             modifier = Modifier.size(96.dp)
         )
         Text(
             text = title,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
+            color = colors.onBackground,
             textAlign = TextAlign.Center
         )
         Spacer(Modifier.height(6.dp))
         Text(
             text = message,
             style = MaterialTheme.typography.bodyMedium,
-            color = MutedText,
+            color = colors.onBackground.copy(alpha = 0.85f),
             textAlign = TextAlign.Center
         )
         if (actionLabel != null) {
@@ -118,7 +117,10 @@ fun EmptyState(
                     .fillMaxWidth()
                     .height(52.dp),
                 shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = LightBlue, contentColor = BlueText)
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colors.primary,
+                    contentColor = colors.onPrimary
+                )
             ) {
                 if (actionIcon != null) {
                     Icon(actionIcon, contentDescription = null)
@@ -137,6 +139,7 @@ fun ErrorState(
     onRetryClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val colors = MaterialTheme.colorScheme
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -147,13 +150,16 @@ fun ErrorState(
         Icon(
             imageVector = Icons.Outlined.ErrorOutline,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.error,
+            tint = colors.errorContainer, // light error tone, readable on the mauve background
             modifier = Modifier.size(56.dp)
         )
         Spacer(Modifier.height(8.dp))
-        Text(message, textAlign = TextAlign.Center)
+        Text(message, color = colors.onBackground, textAlign = TextAlign.Center)
         Spacer(Modifier.height(12.dp))
-        OutlinedButton(onClick = onRetryClick) { Text("Try again") }
+        OutlinedButton(
+            onClick = onRetryClick,
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = colors.onBackground)
+        ) { Text("Try again") }
     }
 }
 
@@ -184,28 +190,28 @@ fun WishlistEmptyState(modifier: Modifier = Modifier) {
     )
 }
 
-// ---------- Previews ----------
+// ---------- Previews (on the app background so colors look real) ----------
 
-@Preview(name = "Loading", showBackground = true, heightDp = 400)
 @Composable
-private fun LoadingStatePreview() {
-    MaterialTheme { LoadingState(message = "Loading your closet...") }
+private fun PreviewBox(content: @Composable () -> Unit) {
+    Mystiq_FinalTheme {
+        Column(Modifier.background(MystiqBackground)) { content() }
+    }
 }
 
-@Preview(name = "Empty closet", showBackground = true, heightDp = 400)
+@Preview(name = "Loading", heightDp = 400)
 @Composable
-private fun ClosetEmptyStatePreview() {
-    MaterialTheme { ClosetEmptyState(onScanClick = {}) }
-}
+private fun LoadingStatePreview() = PreviewBox { LoadingState(message = "Loading your closet...") }
 
-@Preview(name = "Empty wishlist", showBackground = true, heightDp = 400)
+@Preview(name = "Empty closet", heightDp = 400)
 @Composable
-private fun WishlistEmptyStatePreview() {
-    MaterialTheme { WishlistEmptyState() }
-}
+private fun ClosetEmptyStatePreview() = PreviewBox { ClosetEmptyState(onScanClick = {}) }
 
-@Preview(name = "Error", showBackground = true, heightDp = 400)
+@Preview(name = "Empty wishlist", heightDp = 400)
 @Composable
-private fun ErrorStatePreview() {
-    MaterialTheme { ErrorState(message = "Your closet couldn't be loaded.", onRetryClick = {}) }
-}
+private fun WishlistEmptyStatePreview() = PreviewBox { WishlistEmptyState() }
+
+@Preview(name = "Error", heightDp = 400)
+@Composable
+private fun ErrorStatePreview() =
+    PreviewBox { ErrorState(message = "Your closet couldn't be loaded.", onRetryClick = {}) }
