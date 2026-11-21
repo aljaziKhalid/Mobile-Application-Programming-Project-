@@ -10,18 +10,21 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 fun ProfileRoute(
     onLogoutClick: () -> Unit,
     onClosetClick: () -> Unit,
+    onBodyShapeClick: () -> Unit = {},
+    onEditProfileClick: () -> Unit = {},
     onSettingsClick: () -> Unit = {},
     onPreferencesClick: () -> Unit = {},
     onHomeClick: () -> Unit = {},
     onAddClick: () -> Unit = {},
-    onOutfitsClick: () -> Unit = {} ,
+    onOutfitsClick: () -> Unit = {},
     profileViewModel: ProfileViewModel = viewModel()
 ) {
     val uiState by profileViewModel.uiState.collectAsState()
 
     ProfileScreen(
         uiState = uiState,
-        onEditProfileClick = {},
+        onEditProfileClick = onEditProfileClick,
+        onBodyShapeClick = onBodyShapeClick,
         onSettingsClick = onSettingsClick,
         onPreferencesClick = onPreferencesClick,
         onLogoutClick = onLogoutClick,
@@ -29,6 +32,5 @@ fun ProfileRoute(
         onHomeClick = onHomeClick,
         onAddClick = onAddClick,
         onOutfitsClick = onOutfitsClick
-    )}
-
-
+    )
+}
