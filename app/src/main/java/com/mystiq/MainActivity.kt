@@ -176,7 +176,9 @@ class MainActivity : ComponentActivity() {
                                 currentScreen = "userinfo"
                             },
 
-                            onSettingsClick = {},
+                            onSettingsClick = {
+                                currentScreen = "userinfo"
+                            },
 
                             onPreferencesClick = {},
 
