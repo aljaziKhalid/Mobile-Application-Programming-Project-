@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import com.mystiq.ui.screens.auth.SignInScreen
 import com.mystiq.ui.screens.auth.SignUpRoute
 import com.mystiq.ui.screens.home.HomeRoute
+import com.mystiq.ui.screens.closet.ClosetRoute
 import com.mystiq.ui.screens.archive.ArchiveRoute
 import com.mystiq.ui.screens.camera.CameraRoute
 import com.mystiq.ui.screens.profile.ProfileRoute
@@ -96,7 +97,9 @@ class MainActivity : ComponentActivity() {
 
                     "home" -> {
                         HomeRoute(
-                            onClosetClick = {},
+                            onClosetClick = {
+                                currentScreen = "closet"
+                            },
                             onVaultClick = {},
                             onArchiveClick = {
                                 currentScreen = "archive"
@@ -110,6 +113,21 @@ class MainActivity : ComponentActivity() {
                             onWishlistClick = {
                                 currentScreen = "wishlist"
                             }
+                        )
+                    }
+
+                    "closet" -> {
+                        ClosetRoute(
+                            onBackClick = {
+                                currentScreen = "home"
+                            },
+                            onAddItemClick = {
+                                currentScreen = "camera"
+                            },
+                            onStatsClick = {},
+                            onWearTrackerClick = {},
+                            onCategoriesClick = {},
+                            onItemClick = {}
                         )
                     }
 
@@ -162,7 +180,9 @@ class MainActivity : ComponentActivity() {
                                 currentScreen = "signin"
                             },
 
-                            onClosetClick = {},
+                            onClosetClick = {
+                                currentScreen = "closet"
+                            },
 
                             onWishlistClick = {
                                 currentScreen = "wishlist"

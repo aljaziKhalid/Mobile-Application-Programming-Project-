@@ -20,6 +20,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Person
@@ -36,6 +37,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -67,6 +69,7 @@ private val MutedText = Color(0xFF6B6B6B)
 @Composable
 fun ClosetScreen(
     uiState: ClosetUiState,
+    onBackClick: () -> Unit,
     onSearchQueryChange: (String) -> Unit,
     onRetryClick: () -> Unit,
     onAddItemClick: () -> Unit,
@@ -82,7 +85,7 @@ fun ClosetScreen(
             .background(ScreenBackground)
             .padding(horizontal = 20.dp, vertical = 16.dp)
     ) {
-        ClosetHeader(onStatsClick = onStatsClick, onAddClick = onAddItemClick)
+        ClosetHeader(onBackClick = onBackClick, onStatsClick = onStatsClick, onAddClick = onAddItemClick)
         Spacer(Modifier.height(12.dp))
         SearchRow(
             query = uiState.searchQuery,
@@ -114,8 +117,11 @@ fun ClosetScreen(
 }
 
 @Composable
-private fun ClosetHeader(onStatsClick: () -> Unit, onAddClick: () -> Unit) {
+private fun ClosetHeader(onBackClick: () -> Unit, onStatsClick: () -> Unit, onAddClick: () -> Unit) {
     Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        IconButton(onClick = onBackClick) {
+            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+        }
         Text(
             text = "Closet",
             style = MaterialTheme.typography.headlineMedium,
@@ -327,6 +333,7 @@ private fun PreviewScreen(state: ClosetUiState) {
     MaterialTheme {
         ClosetScreen(
             uiState = state,
+            onBackClick = {},
             onSearchQueryChange = {}, onRetryClick = {}, onAddItemClick = {},
             onStatsClick = {}, onWearTrackerClick = {}, onCategoriesClick = {}, onItemClick = {}
         )
