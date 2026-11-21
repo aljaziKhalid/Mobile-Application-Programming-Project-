@@ -14,6 +14,7 @@ import com.mystiq.ui.screens.camera.CameraRoute
 import com.mystiq.ui.screens.profile.ProfileRoute
 import com.mystiq.ui.screens.bodyshape.BodyShapeRoute
 import com.mystiq.ui.screens.wishlist.WishlistRoute
+import com.mystiq.ui.screens.userinfo.UserInfoRoute
 import com.mystiq.ui.navigation.MystiqOnboardingNavigation
 import com.mystiq.ui.theme.Mystiq_FinalTheme
 
@@ -167,6 +168,10 @@ class MainActivity : ComponentActivity() {
                                 currentScreen = "bodyshape"
                             },
 
+                            onEditProfileClick = {
+                                currentScreen = "userinfo"
+                            },
+
                             onSettingsClick = {},
 
                             onPreferencesClick = {},
@@ -180,6 +185,14 @@ class MainActivity : ComponentActivity() {
                             },
 
                             onOutfitsClick = {}
+                        )
+                    }
+
+                    "userinfo" -> {
+                        UserInfoRoute(
+                            onBackClick = {
+                                currentScreen = "profile"
+                            }
                         )
                     }
 
