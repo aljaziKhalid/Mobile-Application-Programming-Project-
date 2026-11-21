@@ -127,7 +127,14 @@ class MainActivity : ComponentActivity() {
                             onStatsClick = {},
                             onWearTrackerClick = {},
                             onCategoriesClick = {},
-                            onItemClick = {}
+                            onItemClick = {},
+                            onHomeClick = {
+                                currentScreen = "home"
+                            },
+                            onProfileClick = {
+                                currentScreen = "profile"
+                            },
+                            onOutfitsClick = {}
                         )
                     }
 

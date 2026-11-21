@@ -41,6 +41,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -56,6 +57,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mystiq.ui.components.MystiqBottomBar
 
 // TODO: move these into ui/theme/Color.kt
 private val ScreenBackground = Color(0xFFF0F0F0)
@@ -77,40 +79,59 @@ fun ClosetScreen(
     onWearTrackerClick: () -> Unit,
     onCategoriesClick: () -> Unit,
     onItemClick: (Long) -> Unit,
+    onHomeClick: () -> Unit,
+    onOutfitsClick: () -> Unit,
+    onProfileClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(ScreenBackground)
-            .padding(horizontal = 20.dp, vertical = 16.dp)
-    ) {
-        ClosetHeader(onBackClick = onBackClick, onStatsClick = onStatsClick, onAddClick = onAddItemClick)
-        Spacer(Modifier.height(12.dp))
-        SearchRow(
-            query = uiState.searchQuery,
-            onQueryChange = onSearchQueryChange,
-            onCategoriesClick = onCategoriesClick
-        )
-        BodyPreview(onWearTrackerClick = onWearTrackerClick)
-        SectionTitle("My Clothing Items")
-
-        // This Box switches between the 4 UI states
-        Box(
+    Scaffold(
+        modifier = modifier,
+        containerColor = ScreenBackground,
+        bottomBar = {
+            MystiqBottomBar(
+                selectedTab = "closet",
+                onHomeClick = onHomeClick,
+                onClosetClick = {},                 // already on Closet
+                onAddClick = onAddItemClick,        // Add tab -> camera
+                onOutfitsClick = onOutfitsClick,
+                onProfileClick = onProfileClick
+            )
+        }
+    ) { innerPadding ->
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            contentAlignment = Alignment.Center
+                .fillMaxSize()
+                .padding(innerPadding)
+                .background(ScreenBackground)
+                .padding(horizontal = 20.dp, vertical = 16.dp)
         ) {
-            when {
-                uiState.isLoading -> CircularProgressIndicator()
-                uiState.errorMessage != null -> ErrorState(uiState.errorMessage, onRetryClick)
-                uiState.items.isEmpty() -> EmptyClosetState(onScanClick = onAddItemClick)
-                uiState.visibleItems.isEmpty() -> Text(
-                    text = "No items match \"${uiState.searchQuery}\"",
-                    color = MutedText
-                )
-                else -> ClothingGrid(items = uiState.visibleItems, onItemClick = onItemClick)
+            ClosetHeader(onBackClick = onBackClick, onStatsClick = onStatsClick, onAddClick = onAddItemClick)
+            Spacer(Modifier.height(12.dp))
+            SearchRow(
+                query = uiState.searchQuery,
+                onQueryChange = onSearchQueryChange,
+                onCategoriesClick = onCategoriesClick
+            )
+            BodyPreview(onWearTrackerClick = onWearTrackerClick)
+            SectionTitle("My Clothing Items")
+
+            // This Box switches between the 4 UI states
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                when {
+                    uiState.isLoading -> CircularProgressIndicator()
+                    uiState.errorMessage != null -> ErrorState(uiState.errorMessage, onRetryClick)
+                    uiState.items.isEmpty() -> EmptyClosetState(onScanClick = onAddItemClick)
+                    uiState.visibleItems.isEmpty() -> Text(
+                        text = "No items match \"${uiState.searchQuery}\"",
+                        color = MutedText
+                    )
+                    else -> ClothingGrid(items = uiState.visibleItems, onItemClick = onItemClick)
+                }
             }
         }
     }
@@ -335,7 +356,8 @@ private fun PreviewScreen(state: ClosetUiState) {
             uiState = state,
             onBackClick = {},
             onSearchQueryChange = {}, onRetryClick = {}, onAddItemClick = {},
-            onStatsClick = {}, onWearTrackerClick = {}, onCategoriesClick = {}, onItemClick = {}
+            onStatsClick = {}, onWearTrackerClick = {}, onCategoriesClick = {}, onItemClick = {},
+            onHomeClick = {}, onOutfitsClick = {}, onProfileClick = {}
         )
     }
 }

@@ -14,6 +14,9 @@ fun ClosetRoute(
     onWearTrackerClick: () -> Unit,
     onCategoriesClick: () -> Unit,
     onItemClick: (Long) -> Unit,
+    onHomeClick: () -> Unit,
+    onProfileClick: () -> Unit,
+    onOutfitsClick: () -> Unit = {},
     viewModel: ClosetViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -30,6 +33,9 @@ fun ClosetRoute(
         onStatsClick = onStatsClick,
         onWearTrackerClick = onWearTrackerClick,
         onCategoriesClick = onCategoriesClick,
-        onItemClick = onItemClick
+        onItemClick = onItemClick,
+        onHomeClick = onHomeClick,
+        onOutfitsClick = onOutfitsClick,
+        onProfileClick = onProfileClick
     )
 }
