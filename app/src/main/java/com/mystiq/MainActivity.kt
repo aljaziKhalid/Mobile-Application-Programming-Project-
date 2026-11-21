@@ -164,6 +164,10 @@ class MainActivity : ComponentActivity() {
 
                             onClosetClick = {},
 
+                            onWishlistClick = {
+                                currentScreen = "wishlist"
+                            },
+
                             onBodyShapeClick = {
                                 currentScreen = "bodyshape"
                             },

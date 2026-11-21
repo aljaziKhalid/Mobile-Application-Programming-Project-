@@ -1,4 +1,3 @@
-
 package com.mystiq.ui.screens.profile
 
 import androidx.compose.runtime.Composable
@@ -17,6 +16,7 @@ fun ProfileRoute(
     onHomeClick: () -> Unit = {},
     onAddClick: () -> Unit = {},
     onOutfitsClick: () -> Unit = {},
+    onWishlistClick: () -> Unit = {},
     profileViewModel: ProfileViewModel = viewModel()
 ) {
     val uiState by profileViewModel.uiState.collectAsState()
@@ -31,6 +31,7 @@ fun ProfileRoute(
         onClosetClick = onClosetClick,
         onHomeClick = onHomeClick,
         onAddClick = onAddClick,
-        onOutfitsClick = onOutfitsClick
+        onOutfitsClick = onOutfitsClick,
+        onWishlistClick = onWishlistClick
     )
 }

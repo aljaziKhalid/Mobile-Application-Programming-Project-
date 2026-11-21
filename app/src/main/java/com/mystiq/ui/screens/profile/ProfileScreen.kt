@@ -1,4 +1,3 @@
-
 package com.mystiq.ui.screens.profile
 
 import androidx.compose.foundation.BorderStroke
@@ -51,7 +50,8 @@ fun ProfileScreen(
     onClosetClick: () -> Unit,
     onHomeClick: () -> Unit = {},
     onAddClick: () -> Unit = {},
-    onOutfitsClick: () -> Unit = {}
+    onOutfitsClick: () -> Unit = {},
+    onWishlistClick: () -> Unit = {}
 ) {
     val colors = MaterialTheme.colorScheme
 
@@ -109,6 +109,14 @@ fun ProfileScreen(
                     containerColor = colors.surfaceVariant.copy(alpha = 0.5f)
                 )
             ) {
+
+                ProfileOptionRow(
+                    title = "My Wishlist",
+                    subtitle = "Pieces you want to buy",
+                    onClick = onWishlistClick
+                )
+
+                OptionDivider()
 
                 ProfileOptionRow(
                     title = "Body Shape",
