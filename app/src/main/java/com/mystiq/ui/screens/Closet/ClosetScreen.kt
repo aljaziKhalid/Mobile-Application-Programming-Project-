@@ -1,6 +1,5 @@
 package com.mystiq.ui.screens.closet
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -58,15 +57,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mystiq.ui.components.MystiqBottomBar
-
-// TODO: move these into ui/theme/Color.kt
-private val ScreenBackground = Color(0xFFF0F0F0)
-private val FieldBackground = Color(0xFFDADADA)
-private val DarkButton = Color(0xFF8A8A8A)
-private val LightBlue = Color(0xFFCFE0F3)
-private val BlueText = Color(0xFF5B7A99)
-private val SilhouetteColor = Color(0xFF4F5270)
-private val MutedText = Color(0xFF6B6B6B)
+import com.mystiq.ui.theme.Mystiq_FinalTheme
 
 @Composable
 fun ClosetScreen(
@@ -86,7 +77,7 @@ fun ClosetScreen(
 ) {
     Scaffold(
         modifier = modifier,
-        containerColor = ScreenBackground,
+        containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             MystiqBottomBar(
                 selectedTab = "closet",
@@ -102,7 +93,6 @@ fun ClosetScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .background(ScreenBackground)
                 .padding(horizontal = 20.dp, vertical = 16.dp)
         ) {
             ClosetHeader(onBackClick = onBackClick, onStatsClick = onStatsClick, onAddClick = onAddItemClick)
@@ -123,12 +113,12 @@ fun ClosetScreen(
                 contentAlignment = Alignment.Center
             ) {
                 when {
-                    uiState.isLoading -> CircularProgressIndicator()
+                    uiState.isLoading -> CircularProgressIndicator(color = MaterialTheme.colorScheme.onBackground)
                     uiState.errorMessage != null -> ErrorState(uiState.errorMessage, onRetryClick)
                     uiState.items.isEmpty() -> EmptyClosetState(onScanClick = onAddItemClick)
                     uiState.visibleItems.isEmpty() -> Text(
                         text = "No items match \"${uiState.searchQuery}\"",
-                        color = MutedText
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.85f)
                     )
                     else -> ClothingGrid(items = uiState.visibleItems, onItemClick = onItemClick)
                 }
@@ -157,13 +147,14 @@ private fun ClosetHeader(onBackClick: () -> Unit, onStatsClick: () -> Unit, onAd
 
 @Composable
 private fun SquareIconButton(icon: ImageVector, contentDescription: String, onClick: () -> Unit) {
+    val colors = MaterialTheme.colorScheme
     FilledIconButton(
         onClick = onClick,
         modifier = Modifier.size(52.dp),
         shape = RoundedCornerShape(12.dp),
         colors = IconButtonDefaults.filledIconButtonColors(
-            containerColor = DarkButton,
-            contentColor = Color.White
+            containerColor = colors.primary,
+            contentColor = colors.onPrimary
         )
     ) {
         Icon(icon, contentDescription = contentDescription, modifier = Modifier.size(30.dp))
@@ -176,6 +167,7 @@ private fun SearchRow(
     onQueryChange: (String) -> Unit,
     onCategoriesClick: () -> Unit
 ) {
+    val colors = MaterialTheme.colorScheme
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -190,8 +182,15 @@ private fun SearchRow(
             singleLine = true,
             shape = RoundedCornerShape(50),
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = FieldBackground,
-                unfocusedContainerColor = FieldBackground,
+                focusedContainerColor = colors.surfaceVariant,
+                unfocusedContainerColor = colors.surfaceVariant,
+                focusedTextColor = colors.onSurfaceVariant,
+                unfocusedTextColor = colors.onSurfaceVariant,
+                focusedPlaceholderColor = colors.onSurfaceVariant.copy(alpha = 0.6f),
+                unfocusedPlaceholderColor = colors.onSurfaceVariant.copy(alpha = 0.6f),
+                focusedLeadingIconColor = colors.onSurfaceVariant,
+                unfocusedLeadingIconColor = colors.onSurfaceVariant,
+                cursorColor = colors.onSurfaceVariant,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             )
@@ -200,8 +199,8 @@ private fun SearchRow(
             onClick = onCategoriesClick,
             shape = RoundedCornerShape(50),
             colors = ButtonDefaults.filledTonalButtonColors(
-                containerColor = FieldBackground,
-                contentColor = MutedText
+                containerColor = colors.surfaceVariant,
+                contentColor = colors.onSurfaceVariant
             )
         ) {
             Icon(Icons.Filled.SwapVert, contentDescription = null, modifier = Modifier.size(18.dp))
@@ -213,6 +212,7 @@ private fun SearchRow(
 
 @Composable
 private fun BodyPreview(onWearTrackerClick: () -> Unit) {
+    val colors = MaterialTheme.colorScheme
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -222,7 +222,7 @@ private fun BodyPreview(onWearTrackerClick: () -> Unit) {
         Icon(
             imageVector = Icons.Filled.Person,
             contentDescription = null,
-            tint = SilhouetteColor,
+            tint = colors.primary,
             modifier = Modifier
                 .size(170.dp)
                 .align(Alignment.Center)
@@ -230,7 +230,8 @@ private fun BodyPreview(onWearTrackerClick: () -> Unit) {
         Surface(
             onClick = onWearTrackerClick,
             shape = RoundedCornerShape(16.dp),
-            color = LightBlue,
+            color = colors.tertiaryContainer,
+            contentColor = colors.onTertiaryContainer,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(end = 8.dp)
@@ -248,6 +249,7 @@ private fun BodyPreview(onWearTrackerClick: () -> Unit) {
 
 @Composable
 private fun SectionTitle(title: String) {
+    val colors = MaterialTheme.colorScheme
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -256,12 +258,17 @@ private fun SectionTitle(title: String) {
     ) {
         Text(title, style = MaterialTheme.typography.titleSmall)
         Spacer(Modifier.width(12.dp))
-        HorizontalDivider(modifier = Modifier.weight(1f), thickness = 2.dp, color = MutedText)
+        HorizontalDivider(
+            modifier = Modifier.weight(1f),
+            thickness = 2.dp,
+            color = colors.onBackground.copy(alpha = 0.5f)
+        )
     }
 }
 
 @Composable
 private fun EmptyClosetState(onScanClick: () -> Unit) {
+    val colors = MaterialTheme.colorScheme
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -271,7 +278,7 @@ private fun EmptyClosetState(onScanClick: () -> Unit) {
         Icon(
             imageVector = Icons.Outlined.Checkroom,
             contentDescription = null,
-            tint = MutedText,
+            tint = colors.onBackground.copy(alpha = 0.85f),
             modifier = Modifier.size(96.dp)
         )
         Text(
@@ -283,7 +290,7 @@ private fun EmptyClosetState(onScanClick: () -> Unit) {
         Text(
             text = "Start building your digital wardrobe\nby adding your first clothing item",
             style = MaterialTheme.typography.bodyMedium,
-            color = MutedText,
+            color = colors.onBackground.copy(alpha = 0.85f),
             textAlign = TextAlign.Center
         )
         Spacer(Modifier.height(16.dp))
@@ -293,7 +300,7 @@ private fun EmptyClosetState(onScanClick: () -> Unit) {
                 .fillMaxWidth()
                 .height(52.dp),
             shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = LightBlue, contentColor = BlueText)
+            colors = ButtonDefaults.buttonColors(containerColor = colors.primary, contentColor = colors.onPrimary)
         ) {
             Icon(Icons.Outlined.CameraAlt, contentDescription = null)
             Spacer(Modifier.width(10.dp))
@@ -304,9 +311,21 @@ private fun EmptyClosetState(onScanClick: () -> Unit) {
 
 @Composable
 private fun ErrorState(message: String, onRetryClick: () -> Unit) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(message, color = MaterialTheme.colorScheme.error)
-        TextButton(onClick = onRetryClick) { Text("Try again") }
+    val colors = MaterialTheme.colorScheme
+    Surface(
+        shape = RoundedCornerShape(16.dp),
+        color = colors.errorContainer,
+        contentColor = colors.onErrorContainer
+    ) {
+        Column(
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(message, color = colors.onErrorContainer)
+            TextButton(onClick = onRetryClick) {
+                Text("Try again", color = colors.onErrorContainer)
+            }
+        }
     }
 }
 
@@ -326,10 +345,14 @@ private fun ClothingGrid(items: List<ClosetItemUi>, onItemClick: (Long) -> Unit)
 
 @Composable
 private fun ClothingItemCard(item: ClosetItemUi, onClick: () -> Unit) {
+    val colors = MaterialTheme.colorScheme
     Card(
         onClick = onClick,
         shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(
+            containerColor = colors.surfaceVariant,
+            contentColor = colors.onSurfaceVariant
+        )
     ) {
         Box(
             modifier = Modifier
@@ -338,11 +361,19 @@ private fun ClothingItemCard(item: ClosetItemUi, onClick: () -> Unit) {
             contentAlignment = Alignment.Center
         ) {
             // TODO: load item.imageUri with Coil: AsyncImage(model = item.imageUri, ...)
-            Icon(Icons.Outlined.Checkroom, contentDescription = null, tint = MutedText)
+            Icon(
+                Icons.Outlined.Checkroom,
+                contentDescription = null,
+                tint = colors.onSurfaceVariant.copy(alpha = 0.6f)
+            )
         }
         Column(Modifier.padding(horizontal = 8.dp, vertical = 6.dp)) {
             Text(item.name, style = MaterialTheme.typography.labelLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            Text(item.category, style = MaterialTheme.typography.labelSmall, color = MutedText)
+            Text(
+                item.category,
+                style = MaterialTheme.typography.labelSmall,
+                color = colors.onSurfaceVariant.copy(alpha = 0.7f)
+            )
         }
     }
 }
@@ -351,7 +382,7 @@ private fun ClothingItemCard(item: ClosetItemUi, onClick: () -> Unit) {
 
 @Composable
 private fun PreviewScreen(state: ClosetUiState) {
-    MaterialTheme {
+    Mystiq_FinalTheme {
         ClosetScreen(
             uiState = state,
             onBackClick = {},
