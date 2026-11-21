@@ -10,6 +10,7 @@ import com.mystiq.ui.screens.auth.SignInScreen
 import com.mystiq.ui.screens.auth.SignUpRoute
 import com.mystiq.ui.screens.home.HomeRoute
 import com.mystiq.ui.screens.closet.ClosetRoute
+import com.example.mystic.outfit.OutfitRoute
 import com.mystiq.ui.screens.archive.ArchiveRoute
 import com.mystiq.ui.screens.camera.CameraRoute
 import com.mystiq.ui.screens.profile.ProfileRoute
@@ -134,7 +135,17 @@ class MainActivity : ComponentActivity() {
                             onProfileClick = {
                                 currentScreen = "profile"
                             },
-                            onOutfitsClick = {}
+                            onOutfitsClick = {
+                                currentScreen = "outfits"
+                            }
+                        )
+                    }
+
+                    "outfits" -> {
+                        OutfitRoute(
+                            onBackClick = {
+                                currentScreen = "closet"
+                            }
                         )
                     }
 

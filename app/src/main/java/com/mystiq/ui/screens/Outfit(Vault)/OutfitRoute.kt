@@ -1,5 +1,6 @@
 package com.example.mystic.outfit
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -11,6 +12,9 @@ fun OutfitRoute(
     viewModel: OutfitViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    // System back button also returns to the previous screen
+    BackHandler(onBack = onBackClick)
 
     OutfitScreen(
         uiState = uiState,

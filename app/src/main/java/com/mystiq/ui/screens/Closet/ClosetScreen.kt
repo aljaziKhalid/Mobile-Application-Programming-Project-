@@ -21,6 +21,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
@@ -102,7 +103,7 @@ fun ClosetScreen(
                 onQueryChange = onSearchQueryChange,
                 onCategoriesClick = onCategoriesClick
             )
-            BodyPreview(onWearTrackerClick = onWearTrackerClick)
+            BodyPreview(onWearTrackerClick = onWearTrackerClick, onOutfitsClick = onOutfitsClick)
             SectionTitle("My Clothing Items")
 
             // This Box switches between the 4 UI states
@@ -146,11 +147,16 @@ private fun ClosetHeader(onBackClick: () -> Unit, onStatsClick: () -> Unit, onAd
 }
 
 @Composable
-private fun SquareIconButton(icon: ImageVector, contentDescription: String, onClick: () -> Unit) {
+private fun SquareIconButton(
+    icon: ImageVector,
+    contentDescription: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     val colors = MaterialTheme.colorScheme
     FilledIconButton(
         onClick = onClick,
-        modifier = Modifier.size(52.dp),
+        modifier = modifier.size(52.dp),
         shape = RoundedCornerShape(12.dp),
         colors = IconButtonDefaults.filledIconButtonColors(
             containerColor = colors.primary,
@@ -211,7 +217,7 @@ private fun SearchRow(
 }
 
 @Composable
-private fun BodyPreview(onWearTrackerClick: () -> Unit) {
+private fun BodyPreview(onWearTrackerClick: () -> Unit, onOutfitsClick: () -> Unit) {
     val colors = MaterialTheme.colorScheme
     Box(
         modifier = Modifier
@@ -226,6 +232,15 @@ private fun BodyPreview(onWearTrackerClick: () -> Unit) {
             modifier = Modifier
                 .size(170.dp)
                 .align(Alignment.Center)
+        )
+        // Star button (top-right of the preview) -> saved Outfits screen
+        SquareIconButton(
+            icon = Icons.Filled.AutoAwesome,
+            contentDescription = "Outfits",
+            onClick = onOutfitsClick,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(end = 8.dp)
         )
         Surface(
             onClick = onWearTrackerClick,

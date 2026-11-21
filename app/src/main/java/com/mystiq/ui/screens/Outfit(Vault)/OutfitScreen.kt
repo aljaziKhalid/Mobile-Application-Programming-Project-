@@ -36,7 +36,7 @@ fun OutfitScreen(
         modifier = modifier.fillMaxSize(),
         color = colors.background
     ) {
-        Column(Modifier.padding(16.dp)) {
+        Column(Modifier.safeDrawingPadding().padding(16.dp)) {
             IconButton(onClick = onBackClick) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
             }
