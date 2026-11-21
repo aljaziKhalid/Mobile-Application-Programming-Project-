@@ -1,3 +1,4 @@
+
 package com.mystiq.data.local.dao
 
 import androidx.room.Dao
@@ -9,8 +10,6 @@ import androidx.room.Transaction
 import androidx.room.Update
 import com.mystiq.data.local.entity.OutfitEntity
 import com.mystiq.data.local.entity.OutfitItemEntity
-import com.mystiq.data.local.entity.OutfitWithItems
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface OutfitDao {
@@ -28,28 +27,41 @@ interface OutfitDao {
     suspend fun deleteOutfit(outfit: OutfitEntity)
 
     @Query("DELETE FROM outfit_items WHERE outfitId = :outfitId")
-    suspend fun clearOutfitItems(outfitId: Long)
+    suspend fun clearOutfitItems(outfitId: Int)
 
-    @Transaction
-    @Query("SELECT * FROM outfits WHERE userId = :userId ORDER BY createdAt DESC")
-    fun getOutfitsByUser(userId: Long): Flow<List<OutfitWithItems>>
+    @Query("SELECT * FROM outfits ORDER BY outfitId DESC")
+    suspend fun getAllOutfits(): List<OutfitEntity>
 
-    @Transaction
     @Query("SELECT * FROM outfits WHERE outfitId = :outfitId LIMIT 1")
-    suspend fun getOutfitById(outfitId: Long): OutfitWithItems?
+    suspend fun getOutfitById(outfitId: Int): OutfitEntity?
 
-    // Save an outfit and its items together (all or nothing)
     @Transaction
-    suspend fun saveOutfit(outfit: OutfitEntity, clothingItemIds: List<Long>): Long {
-        val outfitId = insertOutfit(outfit)
-        insertOutfitItems(clothingItemIds.map { OutfitItemEntity(outfitId, it) })
-        return outfitId
+    suspend fun saveOutfit(
+        outfit: OutfitEntity,
+        clothingItemIds: List<Int>
+    ): Long {
+        val outfitId = insertOutfit(outfit).toInt()
+
+        insertOutfitItems(
+            clothingItemIds.map { itemId ->
+                OutfitItemEntity(outfitId, itemId)
+            }
+        )
+
+        return outfitId.toLong()
     }
 
-    // Replace the items of an existing outfit
     @Transaction
-    suspend fun replaceOutfitItems(outfitId: Long, clothingItemIds: List<Long>) {
+    suspend fun replaceOutfitItems(
+        outfitId: Int,
+        clothingItemIds: List<Int>
+    ) {
         clearOutfitItems(outfitId)
-        insertOutfitItems(clothingItemIds.map { OutfitItemEntity(outfitId, it) })
+
+        insertOutfitItems(
+            clothingItemIds.map { itemId ->
+                OutfitItemEntity(outfitId, itemId)
+            }
+        )
     }
 }

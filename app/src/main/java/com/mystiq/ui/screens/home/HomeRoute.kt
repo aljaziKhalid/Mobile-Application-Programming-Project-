@@ -11,6 +11,9 @@ fun HomeRoute(
     onArchiveClick: () -> Unit,
     onCameraClick: () -> Unit,
     onProfileClick: () -> Unit,
+    onHomeClick: () -> Unit = {},
+    onAddClick: () -> Unit = onCameraClick,
+    onOutfitsClick: () -> Unit = {},
     viewModel: HomeViewModel = viewModel()
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
@@ -21,6 +24,10 @@ fun HomeRoute(
         onVaultClick = onVaultClick,
         onArchiveClick = onArchiveClick,
         onCameraClick = onCameraClick,
-        onProfileClick = onProfileClick
+        onProfileClick = onProfileClick,
+        onHomeClick = onHomeClick,
+        onAddClick = onAddClick,
+        onOutfitsClick = onOutfitsClick,
+        onRetryClick = viewModel::loadRecentOutfits
     )
 }

@@ -1,5 +1,4 @@
-package Mobile-Application-Programming-Project-
-
+package com.mystiq.ui.screens.Spread
 data class SpreadUiState(
     val shoesPercentage: Int = 13,
     val shirtsPercentage: Int = 50,

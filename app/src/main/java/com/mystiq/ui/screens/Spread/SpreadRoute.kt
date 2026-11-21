@@ -1,4 +1,5 @@
-package com.mystiq.Mobile-Application-Programming-Project-
+
+package com.mystiq.ui.screens.Spread
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,6 +30,7 @@ fun SpreadRoute(
     onNavigateWearTracker: () -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsState()
+
     SpreadScreen(
         state = state,
         onBackClick = onNavigateBack,
@@ -51,25 +53,38 @@ fun SpreadScreen(
                 title = {},
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back"
+                        )
                     }
                 },
                 actions = {
                     IconButton(onClick = onHomeClick) {
-                        Icon(Icons.Default.Home, contentDescription = "Home")
+                        Icon(
+                            imageVector = Icons.Default.Home,
+                            contentDescription = "Home"
+                        )
                     }
+
                     IconButton(onClick = {}) {
-                        Icon(Icons.Default.Add, contentDescription = "Add")
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Add"
+                        )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.White
+                )
             )
         },
         bottomBar = {
-            // شريط التنقل السفلي الخاص بالتطبيق (يمكنك ربطه بالـ BottomBar المشترك لديكم)
+            // Connect the shared BottomBar here if needed.
         },
         containerColor = Color(0xFFF7F7F7)
     ) { paddingValues ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -77,6 +92,7 @@ fun SpreadScreen(
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
             Text(
                 text = "Your Closet Spread",
                 fontSize = 20.sp,
@@ -90,13 +106,12 @@ fun SpreadScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // بطاقة الأحذية
                 SpreadCategoryCard(
                     title = "Shoes",
                     percentage = "${state.shoesPercentage}%",
                     modifier = Modifier.weight(1f)
                 )
-                // بطاقة القمصان
+
                 SpreadCategoryCard(
                     title = "Shirts",
                     percentage = "${state.shirtsPercentage}%",
@@ -110,13 +125,12 @@ fun SpreadScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // بطاقة البنطال
                 SpreadCategoryCard(
                     title = "Jeans",
                     percentage = "${state.jeansPercentage}%",
                     modifier = Modifier.weight(1f)
                 )
-                // بطاقة القبعات
+
                 SpreadCategoryCard(
                     title = "Hats",
                     percentage = "${state.hatsPercentage}%",
@@ -126,7 +140,6 @@ fun SpreadScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // البطاقة الكبيرة في الأسفل
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -135,13 +148,16 @@ fun SpreadScreen(
                     .background(Color(0xFFEAEAEA)),
                 contentAlignment = Alignment.Center
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Text(
                         text = "${state.dominantColorPercentage}%",
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
                     )
+
                     Text(
                         text = state.dominantColorName,
                         fontSize = 16.sp,
@@ -152,23 +168,32 @@ fun SpreadScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // زر الانتقال لـ Wear Tracker
             Button(
                 onClick = onWearTrackerClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
                 shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.DarkGray
+                )
             ) {
-                Text(text = "Wear Tracker", color = Color.White, fontSize = 16.sp)
+                Text(
+                    text = "Wear Tracker",
+                    color = Color.White,
+                    fontSize = 16.sp
+                )
             }
         }
     }
 }
 
 @Composable
-fun SpreadCategoryCard(title: String, percentage: String, modifier: Modifier = Modifier) {
+fun SpreadCategoryCard(
+    title: String,
+    percentage: String,
+    modifier: Modifier = Modifier
+) {
     Box(
         modifier = modifier
             .height(130.dp)
@@ -176,14 +201,39 @@ fun SpreadCategoryCard(title: String, percentage: String, modifier: Modifier = M
             .background(Color.White),
         contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = title, fontSize = 14.sp, color = Color.Gray)
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = title,
+                fontSize = 14.sp,
+                color = Color.Gray
+            )
+
             Spacer(modifier = Modifier.height(8.dp))
-            // مكان الأيقونة أو الصورة المصغرة
-            Box(modifier = Modifier.size(40.dp).background(Color.LightGray, RoundedCornerShape(8.dp)))
+
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(
+                        Color.LightGray,
+                        RoundedCornerShape(8.dp)
+                    )
+            )
+
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = percentage, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-            Text(text = "View", fontSize = 12.sp, color = Color.Gray, modifier = Modifier.clickable {})
+
+            Text(
+                text = percentage,
+                fontWeight = FontWeight.Bold,
+                fontSize = 14.sp
+            )
+
+            Text(
+                text = "View",
+                fontSize = 12.sp,
+                color = Color.Gray
+            )
         }
     }
 }

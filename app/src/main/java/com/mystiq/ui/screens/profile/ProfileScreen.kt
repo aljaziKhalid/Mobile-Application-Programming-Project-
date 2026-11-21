@@ -1,3 +1,4 @@
+
 package com.mystiq.ui.screens.profile
 
 import androidx.compose.foundation.BorderStroke
@@ -35,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.mystiq.ui.components.MystiqBottomBar
 
 private val CardShape = RoundedCornerShape(20.dp)
 
@@ -42,15 +44,29 @@ private val CardShape = RoundedCornerShape(20.dp)
 fun ProfileScreen(
     uiState: ProfileUiState,
     onEditProfileClick: () -> Unit,
+    onBodyShapeClick: () -> Unit,
     onSettingsClick: () -> Unit,
     onPreferencesClick: () -> Unit,
     onLogoutClick: () -> Unit,
-    onClosetClick: () -> Unit
+    onClosetClick: () -> Unit,
+    onHomeClick: () -> Unit = {},
+    onAddClick: () -> Unit = {},
+    onOutfitsClick: () -> Unit = {}
 ) {
     val colors = MaterialTheme.colorScheme
 
     Scaffold(
-        containerColor = colors.background
+        containerColor = colors.background,
+        bottomBar = {
+            MystiqBottomBar(
+                selectedTab = "profile",
+                onHomeClick = onHomeClick,
+                onClosetClick = onClosetClick,
+                onAddClick = onAddClick,
+                onOutfitsClick = onOutfitsClick,
+                onProfileClick = {}
+            )
+        }
     ) { padding ->
 
         Column(
@@ -79,7 +95,6 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Featured card
             ClosetCard(
                 subtitle = "${uiState.closetItemsCount} Items",
                 onClick = onClosetClick
@@ -87,7 +102,6 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Grouped options
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = CardShape,
@@ -95,10 +109,11 @@ fun ProfileScreen(
                     containerColor = colors.surfaceVariant.copy(alpha = 0.5f)
                 )
             ) {
+
                 ProfileOptionRow(
                     title = "Body Shape",
                     subtitle = uiState.bodyShape,
-                    onClick = onEditProfileClick
+                    onClick = onBodyShapeClick
                 )
 
                 OptionDivider()
@@ -123,7 +138,10 @@ fun ProfileScreen(
             OutlinedButton(
                 onClick = onLogoutClick,
                 shape = RoundedCornerShape(16.dp),
-                border = BorderStroke(1.dp, colors.error.copy(alpha = 0.5f)),
+                border = BorderStroke(
+                    1.dp,
+                    colors.error.copy(alpha = 0.5f)
+                ),
                 colors = ButtonDefaults.outlinedButtonColors(
                     contentColor = colors.error
                 ),
@@ -149,15 +167,23 @@ private fun ProfileHeader(
 ) {
     val colors = MaterialTheme.colorScheme
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
-        // Avatar with a soft ring
         Box(
             modifier = Modifier
                 .size(104.dp)
-                .border(2.dp, colors.primary.copy(alpha = 0.25f), CircleShape)
+                .border(
+                    2.dp,
+                    colors.primary.copy(alpha = 0.25f),
+                    CircleShape
+                )
                 .padding(6.dp)
-                .background(colors.primaryContainer, CircleShape),
+                .background(
+                    colors.primaryContainer,
+                    CircleShape
+                ),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -185,7 +211,9 @@ private fun ProfileHeader(
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        TextButton(onClick = onEditProfileClick) {
+        TextButton(
+            onClick = onEditProfileClick
+        ) {
             Text(
                 text = "Edit Profile",
                 style = MaterialTheme.typography.labelLarge,
@@ -213,10 +241,16 @@ private fun ClosetCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 22.dp),
+                .padding(
+                    horizontal = 20.dp,
+                    vertical = 22.dp
+                ),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(modifier = Modifier.weight(1f)) {
+
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
                 Text(
                     text = "My Closet",
                     style = MaterialTheme.typography.titleLarge,
@@ -248,10 +282,16 @@ private fun ProfileOptionRow(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .padding(horizontal = 20.dp, vertical = 16.dp),
+            .padding(
+                horizontal = 20.dp,
+                vertical = 16.dp
+            ),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(modifier = Modifier.weight(1f)) {
+
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
@@ -285,4 +325,3 @@ private fun Chevron(tint: Color) {
         tint = tint
     )
 }
-

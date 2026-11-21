@@ -21,5 +21,4 @@ fun GenderRoute(
                 onNext(gender)
             }
         }
-    )
-}
+    )}
