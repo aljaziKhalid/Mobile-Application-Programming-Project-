@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mystiq.ui.theme.Mystiq_FinalTheme
 
-// Stateless layout: renders OutfitUiState and reports events upward
+// Stateless layout: renders OutfitUiState and reports events upward.
 @Composable
 fun OutfitScreen(
     uiState: OutfitUiState,

@@ -137,7 +137,7 @@ fun VaultScreen(
     }
 }
 
-// ---------- 3. PREVIEW ----------
+// ---------- 3. PREVIEW -----------
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 740)
 @Composable
