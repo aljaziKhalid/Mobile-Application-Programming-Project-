@@ -12,6 +12,9 @@ fun ProfileRoute(
     onClosetClick: () -> Unit,
     onSettingsClick: () -> Unit = {},
     onPreferencesClick: () -> Unit = {},
+    onHomeClick: () -> Unit = {},
+    onAddClick: () -> Unit = {},
+    onOutfitsClick: () -> Unit = {} ,
     profileViewModel: ProfileViewModel = viewModel()
 ) {
     val uiState by profileViewModel.uiState.collectAsState()
@@ -22,8 +25,10 @@ fun ProfileRoute(
         onSettingsClick = onSettingsClick,
         onPreferencesClick = onPreferencesClick,
         onLogoutClick = onLogoutClick,
-        onClosetClick = onClosetClick
-    )
-}
+        onClosetClick = onClosetClick,
+        onHomeClick = onHomeClick,
+        onAddClick = onAddClick,
+        onOutfitsClick = onOutfitsClick
+    )}
 
 

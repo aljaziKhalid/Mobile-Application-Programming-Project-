@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.mystiq.ui.components.MystiqBottomBar
 private val CardShape = RoundedCornerShape(20.dp)
 
 @Composable
@@ -44,12 +45,25 @@ fun ProfileScreen(
     onSettingsClick: () -> Unit,
     onPreferencesClick: () -> Unit,
     onLogoutClick: () -> Unit,
-    onClosetClick: () -> Unit
+    onClosetClick: () -> Unit,
+    onHomeClick: () -> Unit = {},
+    onAddClick: () -> Unit = {},
+    onOutfitsClick: () -> Unit = {}
 ) {
     val colors = MaterialTheme.colorScheme
 
     Scaffold(
-        containerColor = colors.background
+        containerColor = colors.background,
+        bottomBar = {
+            MystiqBottomBar(
+                selectedTab = "profile",
+                onHomeClick = onHomeClick,
+                onClosetClick = onClosetClick,
+                onAddClick = onAddClick,
+                onOutfitsClick = onOutfitsClick,
+                onProfileClick = {}
+            )
+        }
     ) { padding ->
 
         Column(

@@ -111,6 +111,7 @@ class MainActivity : ComponentActivity() {
                             onCaptureClick = { }
                         )
                     }
+
                     "profile" -> {
                         ProfileRoute(
                             onLogoutClick = {
@@ -119,10 +120,20 @@ class MainActivity : ComponentActivity() {
                                 currentScreen = "signin"
                             },
                             onClosetClick = {
-                                // We'll connect Closet later
+                                // Connect Closet when its route is ready
+                            },
+                            onHomeClick = {
+                                currentScreen = "home"
+                            },
+                            onAddClick = {
+                                currentScreen = "camera"
+                            },
+                            onOutfitsClick = {
+                                // Connect Outfits when its route is ready
                             }
                         )
                     }
+
                 }
             }
         }
