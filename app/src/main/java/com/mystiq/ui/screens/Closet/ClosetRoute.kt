@@ -17,6 +17,7 @@ fun ClosetRoute(
     onHomeClick: () -> Unit,
     onProfileClick: () -> Unit,
     onOutfitsClick: () -> Unit = {},
+    onWishlistClick: () -> Unit = {},  // heart button -> wishlist
     viewModel: ClosetViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -36,6 +37,7 @@ fun ClosetRoute(
         onItemClick = onItemClick,
         onHomeClick = onHomeClick,
         onOutfitsClick = onOutfitsClick,
-        onProfileClick = onProfileClick
+        onProfileClick = onProfileClick,
+        onWishlistClick = onWishlistClick
     )
 }

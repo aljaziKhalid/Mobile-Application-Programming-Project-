@@ -9,9 +9,8 @@ import androidx.compose.runtime.*
 import com.mystiq.ui.screens.auth.SignInScreen
 import com.mystiq.ui.screens.auth.SignUpRoute
 import com.mystiq.ui.screens.home.HomeRoute
-import com.mystiq.ui.screens.closet.ClosetRoute
-import com.example.mystic.outfit.OutfitRoute
 import com.mystiq.ui.screens.archive.ArchiveRoute
+import com.mystiq.ui.screens.closet.ClosetRoute
 import com.mystiq.ui.screens.camera.CameraRoute
 import com.mystiq.ui.screens.profile.ProfileRoute
 import com.mystiq.ui.screens.bodyshape.BodyShapeRoute
@@ -125,8 +124,8 @@ class MainActivity : ComponentActivity() {
                             onAddItemClick = {
                                 currentScreen = "camera"
                             },
-                            onStatsClick = {},
-                            onWearTrackerClick = {},
+                            onStatsClick = {},        // TODO: Spread screen
+                            onWearTrackerClick = {},  // TODO: Wear Tracker screen
                             onCategoriesClick = {},
                             onItemClick = {},
                             onHomeClick = {
@@ -135,16 +134,8 @@ class MainActivity : ComponentActivity() {
                             onProfileClick = {
                                 currentScreen = "profile"
                             },
-                            onOutfitsClick = {
-                                currentScreen = "outfits"
-                            }
-                        )
-                    }
-
-                    "outfits" -> {
-                        OutfitRoute(
-                            onBackClick = {
-                                currentScreen = "closet"
+                            onWishlistClick = {
+                                currentScreen = "wishlist"
                             }
                         )
                     }
@@ -214,9 +205,7 @@ class MainActivity : ComponentActivity() {
                                 currentScreen = "userinfo"
                             },
 
-                            onSettingsClick = {
-                                currentScreen = "userinfo"
-                            },
+                            onSettingsClick = {},
 
                             onPreferencesClick = {},
 

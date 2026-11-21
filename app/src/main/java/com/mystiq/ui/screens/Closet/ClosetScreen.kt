@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material.icons.outlined.Checkroom
 import androidx.compose.material.icons.outlined.EventAvailable
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -74,6 +75,7 @@ fun ClosetScreen(
     onHomeClick: () -> Unit,
     onOutfitsClick: () -> Unit,
     onProfileClick: () -> Unit,
+    onWishlistClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -96,7 +98,12 @@ fun ClosetScreen(
                 .padding(innerPadding)
                 .padding(horizontal = 20.dp, vertical = 16.dp)
         ) {
-            ClosetHeader(onBackClick = onBackClick, onStatsClick = onStatsClick, onAddClick = onAddItemClick)
+            ClosetHeader(
+                onBackClick = onBackClick,
+                onWishlistClick = onWishlistClick,
+                onStatsClick = onStatsClick,
+                onAddClick = onAddItemClick
+            )
             Spacer(Modifier.height(12.dp))
             SearchRow(
                 query = uiState.searchQuery,
@@ -129,7 +136,12 @@ fun ClosetScreen(
 }
 
 @Composable
-private fun ClosetHeader(onBackClick: () -> Unit, onStatsClick: () -> Unit, onAddClick: () -> Unit) {
+private fun ClosetHeader(
+    onBackClick: () -> Unit,
+    onWishlistClick: () -> Unit,
+    onStatsClick: () -> Unit,
+    onAddClick: () -> Unit
+) {
     Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         IconButton(onClick = onBackClick) {
             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -140,6 +152,8 @@ private fun ClosetHeader(onBackClick: () -> Unit, onStatsClick: () -> Unit, onAd
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.weight(1f)
         )
+        SquareIconButton(Icons.Outlined.FavoriteBorder, "Wishlist", onWishlistClick)
+        Spacer(Modifier.width(8.dp))
         SquareIconButton(Icons.Filled.BarChart, "Closet statistics", onStatsClick)
         Spacer(Modifier.width(8.dp))
         SquareIconButton(Icons.Filled.Add, "Add item", onAddClick)
