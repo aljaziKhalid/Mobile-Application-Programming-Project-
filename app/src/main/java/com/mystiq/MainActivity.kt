@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
             Mystiq_FinalTheme {
 
                 var currentScreen by remember {
-                    mutableStateOf("signin")
+                    mutableStateOf("home")
                 }
 
                 var username by remember {
@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
                             },
                             isSignInEnabled =
                                 username.isNotBlank() &&
-                                password.isNotBlank()
+                                        password.isNotBlank()
                         )
                     }
 
@@ -77,10 +77,10 @@ class MainActivity : ComponentActivity() {
                     "home" -> {
                         HomeRoute(
                             onClosetClick = {
-                                // TODO
+                                // TODO: connect when a Closet route exists in the app module
                             },
                             onVaultClick = {
-                                // TODO
+                                // TODO: connect when a Vault route exists in the app module
                             },
                             onArchiveClick = {
                                 currentScreen = "archive"
@@ -98,7 +98,18 @@ class MainActivity : ComponentActivity() {
                         ArchiveRoute(
                             onBackClick = {
                                 currentScreen = "home"
+                            },
+                            onHomeClick = {
+                                currentScreen = "home"
+                            },
+                            onAddClick = {
+                                currentScreen = "camera"
+                            },
+                            onProfileClick = {
+                                currentScreen = "profile"
                             }
+                            // Closet and Outfits keep their default no-op until
+                            // their routes exist (same as Profile).
                         )
                     }
 

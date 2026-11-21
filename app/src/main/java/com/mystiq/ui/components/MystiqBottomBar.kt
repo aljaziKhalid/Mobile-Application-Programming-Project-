@@ -94,10 +94,12 @@ fun MystiqBottomBar(
                         )
                     },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = colors.onPrimaryContainer,
-                        selectedTextColor = colors.primary,
+                        // The pill uses secondaryContainer so it stays visible on the bar
+                        // (primaryContainer was the same color as the bar background).
+                        selectedIconColor = colors.onSecondaryContainer,
+                        selectedTextColor = colors.onSurface,
                         // The Add button draws its own background, so no pill behind it
-                        indicatorColor = if (isAdd) Color.Transparent else colors.primaryContainer,
+                        indicatorColor = if (isAdd) Color.Transparent else colors.secondaryContainer,
                         unselectedIconColor = colors.onSurfaceVariant,
                         unselectedTextColor = colors.onSurfaceVariant
                     )
