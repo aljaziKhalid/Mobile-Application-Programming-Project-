@@ -1,3 +1,4 @@
+
 package com.mystiq
 
 import android.os.Bundle
@@ -6,11 +7,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.*
 
+import com.mystiq.ui.screens.WareTracker.WearTrackerRoute
 import com.mystiq.ui.screens.auth.SignInScreen
 import com.mystiq.ui.screens.auth.SignUpRoute
 import com.mystiq.ui.screens.home.HomeRoute
-import com.mystiq.ui.screens.archive.ArchiveRoute
 import com.mystiq.ui.screens.closet.ClosetRoute
+import com.example.mystic.outfit.OutfitRoute
+import com.mystiq.ui.screens.archive.ArchiveRoute
 import com.mystiq.ui.screens.camera.CameraRoute
 import com.mystiq.ui.screens.profile.ProfileRoute
 import com.mystiq.ui.screens.bodyshape.BodyShapeRoute
@@ -124,8 +127,10 @@ class MainActivity : ComponentActivity() {
                             onAddItemClick = {
                                 currentScreen = "camera"
                             },
-                            onStatsClick = {},        // TODO: Spread screen
-                            onWearTrackerClick = {},  // TODO: Wear Tracker screen
+                            onStatsClick = {},
+                            onWearTrackerClick = {
+                                currentScreen = "weartracker"
+                            },
                             onCategoriesClick = {},
                             onItemClick = {},
                             onHomeClick = {
@@ -134,8 +139,39 @@ class MainActivity : ComponentActivity() {
                             onProfileClick = {
                                 currentScreen = "profile"
                             },
-                            onWishlistClick = {
-                                currentScreen = "wishlist"
+                            onOutfitsClick = {
+                                currentScreen = "outfits"
+                            }
+                        )
+                    }
+
+                    "weartracker" -> {
+                        WearTrackerRoute(
+                            onNavigateBack = {
+                                currentScreen = "closet"
+                            },
+                            onHomeClick = {
+                                currentScreen = "home"
+                            },
+                            onClosetClick = {
+                                currentScreen = "closet"
+                            },
+                            onAddClick = {
+                                currentScreen = "camera"
+                            },
+                            onOutfitsClick = {
+                                currentScreen = "outfits"
+                            },
+                            onProfileClick = {
+                                currentScreen = "profile"
+                            }
+                        )
+                    }
+
+                    "outfits" -> {
+                        OutfitRoute(
+                            onBackClick = {
+                                currentScreen = "closet"
                             }
                         )
                     }
@@ -188,35 +224,28 @@ class MainActivity : ComponentActivity() {
                                 selectedBodyShape = null
                                 currentScreen = "signin"
                             },
-
                             onClosetClick = {
                                 currentScreen = "closet"
                             },
-
                             onWishlistClick = {
                                 currentScreen = "wishlist"
                             },
-
                             onBodyShapeClick = {
                                 currentScreen = "bodyshape"
                             },
-
                             onEditProfileClick = {
                                 currentScreen = "userinfo"
                             },
-
-                            onSettingsClick = {},
-
+                            onSettingsClick = {
+                                currentScreen = "userinfo"
+                            },
                             onPreferencesClick = {},
-
                             onHomeClick = {
                                 currentScreen = "home"
                             },
-
                             onAddClick = {
                                 currentScreen = "camera"
                             },
-
                             onOutfitsClick = {}
                         )
                     }

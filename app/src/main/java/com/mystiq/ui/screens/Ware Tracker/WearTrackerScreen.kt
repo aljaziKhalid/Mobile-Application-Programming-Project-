@@ -1,44 +1,68 @@
+
 package com.mystiq.ui.screens.WareTracker
 
-
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.mystiq.ui.components.MystiqBottomBar
 
-private val TrackerBackground = Color(0xFFF7F7F7)
-private val TrackerCard = Color(0xFFDCDADA)
-private val TrackerGray = Color(0xFF858585)
-private val TrackerDark = Color(0xFF333333)
-private val TrackerAlert = Color(0xFF8B4513)
-
-
+private val CardShape = RoundedCornerShape(20.dp)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WearTrackerScreen(
     state: WearTrackerUiState,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onHomeClick: () -> Unit = {},
+    onClosetClick: () -> Unit = {},
+    onAddClick: () -> Unit = {},
+    onOutfitsClick: () -> Unit = {},
+    onProfileClick: () -> Unit = {}
 ) {
-    var showUnderusedOnly by remember {
+    val colors = MaterialTheme.colorScheme
+
+    var showUnderusedOnly by rememberSaveable {
         mutableStateOf(false)
     }
 
-    var ascending by remember {
+    var ascending by rememberSaveable {
         mutableStateOf(false)
     }
 
@@ -61,16 +85,16 @@ fun WearTrackerScreen(
     }
 
     Scaffold(
-        containerColor = TrackerBackground,
+        containerColor = colors.background,
 
         topBar = {
             TopAppBar(
                 title = {
                     Text(
                         text = "Wear Tracker",
-                        fontSize = 22.sp,
+                        style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = colors.onBackground
                     )
                 },
                 navigationIcon = {
@@ -78,18 +102,25 @@ fun WearTrackerScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = TrackerGray
+                            tint = colors.onSurfaceVariant
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = TrackerBackground
+                    containerColor = colors.background
                 )
             )
         },
 
         bottomBar = {
-            TrackerBottomBar()
+            MystiqBottomBar(
+                selectedTab = "closet",
+                onHomeClick = onHomeClick,
+                onClosetClick = onClosetClick,
+                onAddClick = onAddClick,
+                onOutfitsClick = onOutfitsClick,
+                onProfileClick = onProfileClick
+            )
         }
 
     ) { paddingValues ->
@@ -101,63 +132,61 @@ fun WearTrackerScreen(
                 .padding(horizontal = 20.dp, vertical = 12.dp)
         ) {
 
-            // Heading and filter
+            // Heading, sort toggle and filter
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = "Clothing history",
-                        fontSize = 17.sp,
+                        style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = colors.onBackground
                     )
 
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    TextButton(
+                    IconButton(
                         onClick = {
                             ascending = !ascending
-                        },
-                        contentPadding = PaddingValues(0.dp)
+                        }
                     ) {
-                        Text(
-                            text = if (ascending) "↑" else "↓",
-                            fontSize = 23.sp,
-                            color = Color.Black
+                        Icon(
+                            imageVector = if (ascending) {
+                                Icons.Filled.ArrowUpward
+                            } else {
+                                Icons.Filled.ArrowDownward
+                            },
+                            contentDescription = if (ascending) {
+                                "Sorted: least worn first"
+                            } else {
+                                "Sorted: most worn first"
+                            },
+                            tint = colors.primary
                         )
                     }
                 }
 
-                Button(
+                FilterChip(
+                    selected = showUnderusedOnly,
                     onClick = {
                         showUnderusedOnly = !showUnderusedOnly
                     },
+                    label = {
+                        Text("Underused only")
+                    },
                     shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = if (showUnderusedOnly) {
-                            TrackerDark
-                        } else {
-                            TrackerGray
-                        }
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = colors.primaryContainer,
+                        selectedLabelColor = colors.onPrimaryContainer
                     )
-                ) {
-                    Text(
-                        text = if (showUnderusedOnly) {
-                            "Show All"
-                        } else {
-                            "Filter"
-                        },
-                        color = Color.White
-                    )
-                }
+                )
             }
 
-            Spacer(modifier = Modifier.height(22.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             // Table headings
             Row(
@@ -168,20 +197,20 @@ fun WearTrackerScreen(
             ) {
                 Text(
                     text = "Item",
-                    fontSize = 16.sp,
-                    color = Color.Black
+                    style = MaterialTheme.typography.labelLarge,
+                    color = colors.onSurfaceVariant
                 )
 
                 Text(
                     text = "Wear Times",
-                    fontSize = 16.sp,
-                    color = Color.Black
+                    style = MaterialTheme.typography.labelLarge,
+                    color = colors.onSurfaceVariant
                 )
             }
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Dataset items or empty state
+            // Items or empty state
             if (displayedItems.isEmpty()) {
 
                 Box(
@@ -192,8 +221,9 @@ fun WearTrackerScreen(
                 ) {
                     Text(
                         text = "No clothing data available yet",
-                        color = TrackerGray,
-                        fontSize = 14.sp
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = colors.onSurfaceVariant,
+                        textAlign = TextAlign.Center
                     )
                 }
 
@@ -214,162 +244,133 @@ fun WearTrackerScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Rediscover your closet
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(TrackerGray)
-                    .padding(16.dp)
-            ) {
-                Column {
-                    Text(
-                        text = "Rediscover Your Closet",
-                        color = Color.White,
-                        fontSize = 17.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+            RediscoverCard()
+        }
+    }
+}
 
-                    Spacer(modifier = Modifier.height(5.dp))
+@Composable
+private fun RediscoverCard() {
+    val colors = MaterialTheme.colorScheme
 
-                    Text(
-                        text = "Style your underused items in a new outfit",
-                        color = Color.LightGray,
-                        fontSize = 12.sp
-                    )
+    Surface(
+        shape = CardShape,
+        color = colors.primaryContainer,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(
+                text = "Rediscover Your Closet",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = colors.onPrimaryContainer
+            )
 
-                    Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(4.dp))
 
-                    Text(
-                        text = "Style underused outfits 🧥",
-                        color = Color.White,
-                        fontSize = 14.sp
-                    )
-                }
-            }
+            Text(
+                text = "Style your underused items in a new outfit",
+                style = MaterialTheme.typography.bodySmall,
+                color = colors.onPrimaryContainer.copy(alpha = 0.8f)
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                text = "Style underused outfits 🧥",
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = colors.primary
+            )
         }
     }
 }
 
 @Composable
 fun WearItemCard(item: WearItem) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .background(TrackerCard)
-            .padding(12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
+    val colors = MaterialTheme.colorScheme
 
+    Surface(
+        shape = CardShape,
+        color = colors.surfaceVariant.copy(alpha = 0.5f),
+        modifier = Modifier.fillMaxWidth()
+    ) {
         Row(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Box(
-                modifier = Modifier
-                    .size(62.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(Color.White),
-                contentAlignment = Alignment.Center
+            // Thumbnail
+            Surface(
+                shape = RoundedCornerShape(14.dp),
+                color = colors.surface,
+                modifier = Modifier.size(64.dp)
             ) {
-                if (item.image.isNotBlank()) {
-                    Text(
-                        text = item.image,
-                        fontSize = 35.sp
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.width(10.dp))
-
-            Column {
-                Text(
-                    text = item.name,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Black
-                )
-
-                Spacer(modifier = Modifier.height(5.dp))
-
-                Text(
-                    text = "Last worn: ${item.lastWorn}",
-                    fontSize = 11.sp,
-                    color = Color.Black
-                )
-
-                if (item.isAlert) {
-                    Spacer(modifier = Modifier.height(5.dp))
-
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(TrackerAlert)
-                            .padding(
-                                horizontal = 7.dp,
-                                vertical = 3.dp
-                            )
-                    ) {
+                Box(
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (item.image.isNotBlank()) {
                         Text(
-                            text = "Not worn in 30+ days",
-                            color = Color.White,
-                            fontSize = 9.sp
+                            text = item.image,
+                            style = MaterialTheme.typography.headlineLarge
                         )
                     }
                 }
             }
-        }
 
-        Text(
-            text = item.wearTimes.toString(),
-            fontSize = 21.sp,
-            fontWeight = FontWeight.Medium,
-            color = Color.Black,
-            modifier = Modifier.padding(horizontal = 8.dp)
-        )
-    }
-}
+            Spacer(modifier = Modifier.width(12.dp))
 
-@Composable
-fun TrackerBottomBar() {
-    NavigationBar(
-        containerColor = Color(0xFFE0DEDE),
-        contentColor = Color.DarkGray
-    ) {
-        NavigationBarItem(
-            selected = false,
-            onClick = {},
-            icon = { Text("▤", fontSize = 23.sp) },
-            label = { Text("Closet") }
-        )
-
-        NavigationBarItem(
-            selected = false,
-            onClick = {},
-            icon = { Text("♧", fontSize = 23.sp) },
-            label = { Text("Outfits") }
-        )
-
-        NavigationBarItem(
-            selected = false,
-            onClick = {},
-            icon = { Text("＋", fontSize = 23.sp) },
-            label = { Text("Add") }
-        )
-
-        NavigationBarItem(
-            selected = false,
-            onClick = {},
-            icon = {
-                Icon(
-                    Icons.Default.Home,
-                    contentDescription = "Profile"
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = item.name,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    color = colors.onSurface
                 )
-            },
-            label = { Text("Profile") }
-        )
+
+                Spacer(modifier = Modifier.height(2.dp))
+
+                Text(
+                    text = "Last worn: ${item.lastWorn}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = colors.onSurfaceVariant
+                )
+
+                if (item.isAlert) {
+                    Spacer(modifier = Modifier.height(6.dp))
+
+                    Surface(
+                        shape = RoundedCornerShape(8.dp),
+                        color = colors.tertiaryContainer
+                    ) {
+                        Text(
+                            text = "Not worn in 30+ days",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = colors.onTertiaryContainer,
+                            modifier = Modifier.padding(
+                                horizontal = 8.dp,
+                                vertical = 3.dp
+                            )
+                        )
+                    }
+                }
+            }
+
+            Text(
+                text = item.wearTimes.toString(),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = if (item.isAlert) {
+                    colors.tertiary
+                } else {
+                    colors.onSurface
+                },
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+        }
     }
 }
