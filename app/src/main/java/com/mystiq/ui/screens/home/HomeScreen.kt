@@ -24,6 +24,7 @@ import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material.icons.outlined.Checkroom
 import androidx.compose.material.icons.outlined.ErrorOutline
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Person
@@ -65,6 +66,7 @@ fun HomeScreen(
     onAddClick: () -> Unit = onCameraClick,
     onOutfitsClick: () -> Unit = {},
     onRetryClick: () -> Unit = {},
+    onWishlistClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val colors = MaterialTheme.colorScheme
@@ -96,7 +98,7 @@ fun HomeScreen(
         ) {
 
             item {
-                HomeHeader(onProfileClick = onProfileClick)
+                HomeHeader(onProfileClick = onProfileClick, onWishlistClick = onWishlistClick)
             }
 
             item {
@@ -154,7 +156,7 @@ private fun greetingForNow(): String {
 }
 
 @Composable
-private fun HomeHeader(onProfileClick: () -> Unit) {
+private fun HomeHeader(onProfileClick: () -> Unit, onWishlistClick: () -> Unit) {
     val colors = MaterialTheme.colorScheme
     val greeting = remember { greetingForNow() }
 
@@ -177,18 +179,39 @@ private fun HomeHeader(onProfileClick: () -> Unit) {
             )
         }
 
-        Surface(
-            onClick = onProfileClick,
-            shape = CircleShape,
-            color = colors.surfaceVariant,
-            modifier = Modifier.size(46.dp)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Box(contentAlignment = Alignment.Center) {
-                Icon(
-                    imageVector = Icons.Outlined.Person,
-                    contentDescription = "Profile",
-                    tint = colors.onSurfaceVariant
-                )
+            // Heart: opens the Wishlist screen
+            Surface(
+                onClick = onWishlistClick,
+                shape = CircleShape,
+                color = colors.surfaceVariant,
+                modifier = Modifier.size(46.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = Icons.Outlined.FavoriteBorder,
+                        contentDescription = "Wishlist",
+                        tint = colors.onSurfaceVariant
+                    )
+                }
+            }
+
+            Surface(
+                onClick = onProfileClick,
+                shape = CircleShape,
+                color = colors.surfaceVariant,
+                modifier = Modifier.size(46.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = Icons.Outlined.Person,
+                        contentDescription = "Profile",
+                        tint = colors.onSurfaceVariant
+                    )
+                }
             }
         }
     }

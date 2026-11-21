@@ -1,4 +1,3 @@
-
 package com.mystiq
 
 import android.os.Bundle
@@ -14,6 +13,7 @@ import com.mystiq.ui.screens.archive.ArchiveRoute
 import com.mystiq.ui.screens.camera.CameraRoute
 import com.mystiq.ui.screens.profile.ProfileRoute
 import com.mystiq.ui.screens.bodyshape.BodyShapeRoute
+import com.mystiq.ui.screens.wishlist.WishlistRoute
 import com.mystiq.ui.navigation.MystiqOnboardingNavigation
 import com.mystiq.ui.theme.Mystiq_FinalTheme
 
@@ -105,7 +105,22 @@ class MainActivity : ComponentActivity() {
                             },
                             onProfileClick = {
                                 currentScreen = "profile"
+                            },
+                            onWishlistClick = {
+                                currentScreen = "wishlist"
                             }
+                        )
+                    }
+
+                    "wishlist" -> {
+                        WishlistRoute(
+                            onBackClick = {
+                                currentScreen = "home"
+                            },
+                            onAddClick = {
+                                currentScreen = "camera"
+                            },
+                            onItemClick = {}
                         )
                     }
 

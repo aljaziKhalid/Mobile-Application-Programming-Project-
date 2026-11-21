@@ -14,6 +14,7 @@ fun HomeRoute(
     onHomeClick: () -> Unit = {},
     onAddClick: () -> Unit = onCameraClick,
     onOutfitsClick: () -> Unit = {},
+    onWishlistClick: () -> Unit = {},
     viewModel: HomeViewModel = viewModel()
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
@@ -28,6 +29,7 @@ fun HomeRoute(
         onHomeClick = onHomeClick,
         onAddClick = onAddClick,
         onOutfitsClick = onOutfitsClick,
-        onRetryClick = viewModel::loadRecentOutfits
+        onRetryClick = viewModel::loadRecentOutfits,
+        onWishlistClick = onWishlistClick
     )
 }
