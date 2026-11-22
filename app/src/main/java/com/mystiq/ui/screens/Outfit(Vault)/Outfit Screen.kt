@@ -48,7 +48,7 @@ fun VaultRoute(onBackClick: () -> Unit = {}) {
         onBackClick = onBackClick,
         onOutfitClick = { outfit ->
             selectedIds = if (outfit.id in selectedIds) selectedIds - outfit.id
-                          else selectedIds + outfit.id
+            else selectedIds + outfit.id
         },
         onSelectAllClick = { selectedIds = outfits.map { it.id }.toSet() },
         onCloseClick = { selectedIds = emptySet() }   // X – TODO confirm (clear selection vs delete)

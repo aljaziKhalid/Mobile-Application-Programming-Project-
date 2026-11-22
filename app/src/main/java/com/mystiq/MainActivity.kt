@@ -36,6 +36,10 @@ class MainActivity : ComponentActivity() {
                     mutableStateOf("signin")
                 }
 
+                var previousScreen by remember {
+                    mutableStateOf("home")
+                }
+
                 var username by remember {
                     mutableStateOf("")
                 }
@@ -50,6 +54,11 @@ class MainActivity : ComponentActivity() {
 
                 var selectedBodyShape by remember {
                     mutableStateOf<String?>(null)
+                }
+
+                fun openOutfits() {
+                    previousScreen = currentScreen
+                    currentScreen = "outfits"
                 }
 
                 when (currentScreen) {
@@ -113,6 +122,15 @@ class MainActivity : ComponentActivity() {
                             onProfileClick = {
                                 currentScreen = "profile"
                             },
+                            onHomeClick = {
+                                currentScreen = "home"
+                            },
+                            onAddClick = {
+                                currentScreen = "camera"
+                            },
+                            onOutfitsClick = {
+                                openOutfits()
+                            },
                             onWishlistClick = {
                                 currentScreen = "wishlist"
                             }
@@ -140,7 +158,7 @@ class MainActivity : ComponentActivity() {
                                 currentScreen = "profile"
                             },
                             onOutfitsClick = {
-                                currentScreen = "outfits"
+                                openOutfits()
                             }
                         )
                     }
@@ -160,7 +178,7 @@ class MainActivity : ComponentActivity() {
                                 currentScreen = "camera"
                             },
                             onOutfitsClick = {
-                                currentScreen = "outfits"
+                                openOutfits()
                             },
                             onProfileClick = {
                                 currentScreen = "profile"
@@ -171,7 +189,7 @@ class MainActivity : ComponentActivity() {
                     "outfits" -> {
                         OutfitRoute(
                             onBackClick = {
-                                currentScreen = "closet"
+                                currentScreen = previousScreen
                             }
                         )
                     }
@@ -246,7 +264,9 @@ class MainActivity : ComponentActivity() {
                             onAddClick = {
                                 currentScreen = "camera"
                             },
-                            onOutfitsClick = {}
+                            onOutfitsClick = {
+                                openOutfits()
+                            }
                         )
                     }
 
