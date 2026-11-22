@@ -1,0 +1,31 @@
+
+package com.mystiq.data.repository
+
+import com.mystiq.data.local.dao.CategoryCountStat
+import com.mystiq.data.local.dao.ColorCountStat
+import com.mystiq.data.local.dao.WearLogDao
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+
+data class SpreadData(
+    val categories: List<CategoryCountStat>,
+    val colors: List<ColorCountStat>
+)
+
+class SpreadRepository(
+    private val wearLogDao: WearLogDao
+) {
+
+    fun observeSpreadData(): Flow<SpreadData> {
+        return combine(
+            wearLogDao.observeCategoryCounts(),
+            wearLogDao.observeColorCounts()
+        ) { categories, colors ->
+            SpreadData(
+                categories = categories,
+                colors = colors
+            )
+        }
+    }
+}
